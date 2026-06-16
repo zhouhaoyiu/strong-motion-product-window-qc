@@ -16,11 +16,12 @@ if str(ROOT) not in sys.path:
 
 from scripts.evaluate_strong_motion_response_spectrum_retention import (  # noqa: E402
     DEFAULT_FEATURES,
+    DEFAULT_KNET_WAVEFORMS,
     DEFAULT_SELECTED,
     load_record_waveform,
     load_waveform_handles,
 )
-from scripts.train_strong_motion_masked_encoder import DEFAULT_KNET_WAVEFORMS, standardize_channels  # noqa: E402
+from scripts.compute_strong_motion_qc_features import standardize_channels  # noqa: E402
 from strong_motion_qc.features import vector_amplitude  # noqa: E402
 
 

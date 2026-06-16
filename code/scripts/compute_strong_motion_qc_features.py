@@ -22,7 +22,6 @@ except ImportError:  # pragma: no cover - convenience for minimal envs
     def tqdm(iterable, **kwargs):
         return iterable
 
-from scripts.evaluate_knet_offline import find_waveform_key, list_hdf5_keys
 from strong_motion_qc.features import compute_strong_motion_features
 
 
@@ -84,6 +83,50 @@ def normalize_waveform_orientation(waveform: np.ndarray) -> np.ndarray:
     if arr.shape[1] <= 6:
         return arr.T
     return arr
+
+
+def standardize_channels(waveform: np.ndarray, input_channels: int = 3) -> np.ndarray:
+    arr = normalize_waveform_orientation(waveform).astype(np.float32, copy=False)
+    if arr.ndim == 1:
+        arr = arr[None, :]
+    if arr.shape[0] > input_channels:
+        arr = arr[:input_channels, :]
+    if arr.shape[0] < input_channels:
+        pad = np.zeros((input_channels - arr.shape[0], arr.shape[1]), dtype=np.float32)
+        arr = np.concatenate([arr, pad], axis=0)
+    return arr
+
+
+def list_hdf5_keys(h5file: h5py.File) -> list[str]:
+    keys: list[str] = []
+
+    def recurse(obj, prefix: str = "") -> None:
+        for key, item in obj.items():
+            full_key = f"{prefix}/{key}" if prefix else key
+            if isinstance(item, h5py.Group):
+                recurse(item, full_key)
+            else:
+                keys.append(full_key)
+
+    recurse(h5file)
+    return keys
+
+
+def find_waveform_key(row: pd.Series, all_keys: set[str]) -> str | None:
+    candidates = [
+        str(row.get("trace_name", "")),
+        str(row.get("event_name", "")),
+    ]
+    for value in candidates:
+        if not value or value == "nan":
+            continue
+        direct = value
+        data_key = f"data/{value}"
+        if direct in all_keys:
+            return direct
+        if data_key in all_keys:
+            return data_key
+    return None
 
 
 def highpass_waveform(waveform: np.ndarray, sampling_rate: float, corner_hz: float | None) -> np.ndarray:

@@ -23,13 +23,14 @@ except ImportError:  # pragma: no cover
         return iterable
 
 from scripts.compute_strong_motion_qc_features import (  # noqa: E402
+    DEFAULT_KNET_WAVEFORMS,
     highpass_waveform,
+    list_hdf5_keys,
     load_instance_waveform,
     load_knet_waveform,
     normalize_waveform_orientation,
+    standardize_channels,
 )
-from scripts.evaluate_knet_offline import list_hdf5_keys  # noqa: E402
-from scripts.train_strong_motion_masked_encoder import DEFAULT_KNET_WAVEFORMS, standardize_channels  # noqa: E402
 
 
 DEFAULT_FEATURES = "outputs/strong_motion_qc_waveform_features_knet22119_hp1_inst3000/waveform_features.csv"
