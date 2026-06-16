@@ -79,12 +79,11 @@ record is available before a final processing window is stored.
 We use InstanceGM and K-NET to test the same audit on archives with different
 product-window behavior. InstanceGM provides a large Italian strong-motion and
 seismic waveform archive through the INSTANCE data family (Michelini et al.,
-2021a; Michelini et al., 2021b). K-NET provides Japanese nationwide
+2021; see Data and Resources). K-NET provides Japanese nationwide
 strong-motion recordings operated by NIED (Aoi et al., 2004; Okada et al.,
-2004; National Research Institute for Earth Science and Disaster Resilience,
-2019). Both datasets are evaluated at 100 Hz median sampling rate, keeping the
-comparison focused on waveform scale and window policy. Figure 1 summarizes
-the workflow.
+2004; see Data and Resources). Both datasets are evaluated at 100 Hz median
+sampling rate, keeping the comparison focused on waveform scale and window
+policy. Figure 1 summarizes the workflow.
 
 The paper makes four contributions. First, it defines product stability for
 strong-motion processing windows using peak retention, energy retention, and
@@ -464,16 +463,9 @@ records, *Bull. Seismol. Soc. Am.* 101, no. 6, 2873-2885, doi:
 10.1785/0120110090.
 
 Michelini, A., S. Cianetti, S. Gaviano, C. Giunchi, D. Jozinovic, and V.
-Lauciani (2021a). INSTANCE - the Italian seismic dataset for machine learning,
+Lauciani (2021). INSTANCE - the Italian seismic dataset for machine learning,
 *Earth Syst. Sci. Data* 13, no. 12, 5509-5544, doi:
 10.5194/essd-13-5509-2021.
-
-Michelini, A., S. Cianetti, S. Gaviano, C. Giunchi, D. Jozinovic, and V.
-Lauciani (2021b). INSTANCE: The Italian seismic dataset for machine learning,
-Istituto Nazionale di Geofisica e Vulcanologia, doi: 10.13127/INSTANCE.
-
-National Research Institute for Earth Science and Disaster Resilience (2019).
-NIED K-NET, KiK-net, doi: 10.17598/NIED.0004.
 
 Okada, Y., K. Kasahara, S. Hori, K. Obara, S. Sekiguchi, H. Fujiwara, and A.
 Yamamoto (2004). Recent progress of seismic observation networks in Japan:

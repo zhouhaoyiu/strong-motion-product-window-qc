@@ -148,8 +148,8 @@ FIELD_GUIDANCE = {
     ),
     "data_access_dates": (
         "数据访问日期",
-        "填写 INSTANCE、K-NET/SeisBench 和公开仓库的最终访问日期。",
-        "INSTANCE accessed YYYY-MM-DD; SeisBench accessed YYYY-MM-DD; repository accessed YYYY-MM-DD",
+        "填写 InstanceGM/INSTANCE、K-NET/NIED 和公开仓库的最终访问日期。",
+        "InstanceGM/INSTANCE accessed YYYY-MM-DD; K-NET/NIED accessed YYYY-MM-DD; repository accessed YYYY-MM-DD",
         "Data and Resources",
     ),
     "software_release_doi": (

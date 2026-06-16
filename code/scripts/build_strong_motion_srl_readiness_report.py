@@ -295,8 +295,14 @@ def readiness_checks(
         },
         {
             "check": "references",
-            "status": "PASS" if "Working References" in draft_text and "References To Verify" not in draft_text else "WARN",
-            "evidence": "draft contains working references and no unresolved reference-verification section",
+            "status": (
+                "PASS"
+                if "## References" in draft_text
+                and "Working References" not in draft_text
+                and "References To Verify" not in draft_text
+                else "WARN"
+            ),
+            "evidence": "final reference list present; no working-reference or unresolved-reference heading",
             "readiness_weight": 3,
         },
     ]
