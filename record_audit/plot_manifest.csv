@@ -1,0 +1,17 @@
+case_id,record_uid,format,path
+case_01,InstanceGM:327031,png,figures/case_01_InstanceGM_327031.png
+case_01,InstanceGM:327031,pdf,figures/case_01_InstanceGM_327031.pdf
+case_02,InstanceGM:208045,png,figures/case_02_InstanceGM_208045.png
+case_02,InstanceGM:208045,pdf,figures/case_02_InstanceGM_208045.pdf
+case_03,K-NET:13561,png,figures/case_03_K-NET_13561.png
+case_03,K-NET:13561,pdf,figures/case_03_K-NET_13561.pdf
+case_04,K-NET:13569,png,figures/case_04_K-NET_13569.png
+case_04,K-NET:13569,pdf,figures/case_04_K-NET_13569.pdf
+case_05,K-NET:16611,png,figures/case_05_K-NET_16611.png
+case_05,K-NET:16611,pdf,figures/case_05_K-NET_16611.pdf
+case_06,K-NET:10315,png,figures/case_06_K-NET_10315.png
+case_06,K-NET:10315,pdf,figures/case_06_K-NET_10315.pdf
+case_07,InstanceGM:1159122,png,figures/case_07_InstanceGM_1159122.png
+case_07,InstanceGM:1159122,pdf,figures/case_07_InstanceGM_1159122.pdf
+case_08,K-NET:17355,png,figures/case_08_K-NET_17355.png
+case_08,K-NET:17355,pdf,figures/case_08_K-NET_17355.pdf

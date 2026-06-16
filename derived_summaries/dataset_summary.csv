@@ -1,0 +1,3 @@
+dataset,records,events,stations,loaded_records,catalog_p_records,median_sampling_rate_hz,median_duration_sec,p05_duration_sec,p95_duration_sec,median_magnitude,min_magnitude,max_magnitude
+InstanceGM,31344,9927,568,31344,31344,100.0,120.0,120.0,120.0,3.4,0.0,6.5
+K-NET,22119,1528,921,22119,21141,100.0,119.0,60.0,120.0,4.3,2.8,8.0

@@ -1,0 +1,8 @@
+dataset,priority_group,records,median_duration_sec,median_magnitude
+InstanceGM,low_magnitude_background,9000,120.0,2.2
+InstanceGM,m3_to_m4_small_event,9000,120.0,3.2
+InstanceGM,m4plus_strong_motion,13344,120.0,4.4
+K-NET,low_magnitude_background,21,60.0,2.9
+K-NET,m3_to_m4_small_event,5647,119.0,3.8
+K-NET,m4plus_strong_motion,15473,119.0,4.5
+K-NET,other,978,119.0,4.4
