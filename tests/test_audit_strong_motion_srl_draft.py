@@ -91,6 +91,8 @@ def product_impact() -> pd.DataFrame:
                 "rescued_records": 1,
                 "median_energy_gain": 0.123,
                 "median_duration_change_sec": -2.0,
+                "baseline_energy_loss_records": 1,
+                "baseline_pga_loss_records": 1,
             }
             for dataset in ["InstanceGM", "K-NET"]
             for baseline in ["feature_onset_fixed", "energy_onset_fixed"]

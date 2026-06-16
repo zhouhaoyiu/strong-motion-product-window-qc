@@ -15,7 +15,7 @@ DEFAULT_OUTDIR = "outputs/strong_motion_qc_srl_submission_packet_current"
 DEFAULT_MANUSCRIPT_DIR = "manuscripts/strong_motion_qc_srl"
 DEFAULT_FIGURE_DIR = "outputs/strong_motion_qc_figures_knet22119_hp1_inst3000"
 DEFAULT_AUDIT_DIR = "outputs/strong_motion_qc_srl_draft_audit_knet22119_hp1_inst3000"
-DEFAULT_READINESS_DIR = "outputs/strong_motion_qc_srl_readiness_knet22119_hp1_inst3000"
+DEFAULT_READINESS_DIR = "outputs/strong_motion_qc_srl_readiness"
 DEFAULT_REPRO_RELEASE_DIR = "outputs/strong_motion_qc_srl_reproducibility_release_current"
 DEFAULT_REPRO_RELEASE_ZIP = "outputs/strong_motion_qc_srl_reproducibility_release_current.zip"
 DEFAULT_COMPLIANCE_DIR = "outputs/strong_motion_qc_srl_compliance"
@@ -84,7 +84,7 @@ Dear Editor,
 
 We submit the manuscript "Auditable Product-Stable Window Selection for Strong-Motion Records" for consideration as a Regular Article in *Seismological Research Letters*.
 
-The manuscript addresses a practical strong-motion processing problem: fixed processing windows can preserve peak motion, waveform energy, and response-spectrum quantities unevenly across archives. We evaluate this problem on 53,463 three-component records from InstanceGM and K-NET, then test an offline waveform-derived selector that chooses the shortest candidate window passing explicit product-retention checks.
+The manuscript addresses a practical strong-motion processing problem: fixed processing windows can preserve peak motion, waveform energy, and response-spectrum quantities unevenly across archives. We evaluate this problem on 53,463 three-component records from InstanceGM and K-NET, identify energy truncation as the dominant fixed-window failure mechanism, and test an offline waveform-derived selector that chooses the shortest candidate window passing explicit product-retention checks.
 
 The main contribution is an auditable product-window policy for strong-motion product preparation. Only 0.84% of records are assigned to full-record processing under the default criteria, and the selected-window duration differs by archive: 84.94 s for InstanceGM and 24.66 s for K-NET. A 5% damping response-spectrum audit shows that overall 3.0 s PSA-retention failures drop from 32.28% for feature-onset fixed windows to 5.56% for selected windows.
 
@@ -157,15 +157,15 @@ def reviewer_risk_answers_zh() -> str:
 
 ## 1. 固定窗口已经广泛使用，本文新意在哪里？
 
-固定窗口广泛使用说明它适合批量归档、索引和复用。本文的新意在于把固定窗从经验处理参数转化为记录级产品保持审计对象。审计不只报告窗长，还报告 PGA 保持、相对能量保持、峰值时刻包含、候选来源和全记录回退。这样可以判断固定窗在哪些资料集中可靠、哪些记录需要更长窗口或全记录处理。
+固定窗口广泛使用说明它适合批量归档、索引和复用。本文的新意在于把固定窗从经验处理参数转化为记录级产品保持审计对象，并量化固定窗失败的主导机制。审计同时报告窗长、PGA 保持、相对能量保持、峰值时刻包含、候选来源和全记录处理状态。这样可以判断固定窗在哪些资料集中可靠、哪些记录需要更长窗口或全记录处理。
 
 ## 2. 为什么这个审计对强震动产品生产有实际意义？
 
-强震动资料生产最终交付的是 PGA、反应谱、能量和持续时间等产品。处理窗提前结束会改变这些产品，处理窗过长会增加存储、计算和复核成本。本文给出每条记录可追溯的窗口接受或回退原因，适合用于离线归档、批量产品生成、异常记录复查和资料更新后的再审计。
+强震动资料生产最终交付的是 PGA、反应谱、能量和持续时间等产品。处理窗提前结束会改变这些产品，处理窗过长会增加存储、计算和复核成本。本文给出每条记录可追溯的窗口接受或全记录处理原因，适合用于离线归档、批量产品生成、异常记录复查和资料更新后的再审计。
 
 ## 3. InstanceGM 和 K-NET 的差异是否来自资料集机制，而不是方法本身？
 
-差异主要反映资料集记录机制、记录时长、强震段持续时间和尾波尺度。本文将这种差异作为审计对象处理：同一套候选、阈值和产品保持判据同时应用于 InstanceGM 与 K-NET。结果显示，42.00 s 固定窗在 InstanceGM 上经常截断产品相关运动，在 K-NET 上多数记录可以用更紧凑窗口通过审计。方法的作用是暴露并量化这种资料集依赖性。
+差异主要反映资料集记录机制、记录时长、强震段持续时间和尾波尺度。本文将这种差异作为审计对象处理：同一套候选、阈值和产品保持判据同时应用于 InstanceGM 与 K-NET。结果显示，42.00 s 固定窗失败主要由能量截断驱动；InstanceGM 中 25,468 条特征起点固定窗失败记录均存在能量保留不足，K-NET 中 917 条对应失败记录里有 916 条存在能量保留不足。方法的作用是暴露并量化这种资料集依赖性。
 
 ## 4. 反应谱保持是不是足够支撑工程意义？
 
@@ -201,7 +201,7 @@ python scripts/audit_strong_motion_srl_draft.py \\
   --selector-usage outputs/strong_motion_qc_product_window_selector_knet22119_hp1_inst3000/candidate_usage.csv \\
   --product-impact outputs/strong_motion_qc_product_impact_knet22119_hp1_inst3000/product_impact_summary.csv \\
   --sensitivity outputs/strong_motion_qc_selector_sensitivity_knet22119_hp1_inst3000/sensitivity_summary.csv \\
-  --key-metrics outputs/strong_motion_qc_journal_evidence_packet_knet22119_hp1_inst3000/key_metrics.csv \\
+  --key-metrics outputs/strong_motion_qc_product_window_selector_knet22119_hp1_inst3000/summary.csv \\
   --response-spectrum outputs/strong_motion_qc_response_spectrum_knet22119_hp1_inst3000/summary.csv \\
   --outdir outputs/strong_motion_qc_srl_draft_audit_knet22119_hp1_inst3000
 
@@ -220,13 +220,13 @@ python scripts/build_strong_motion_srl_readiness_report.py \\
   --audit-dir outputs/strong_motion_qc_srl_draft_audit_knet22119_hp1_inst3000 \\
   --figure-manifest outputs/strong_motion_qc_figures_knet22119_hp1_inst3000/figure_manifest.csv \\
   --dataset-summary outputs/strong_motion_qc_dataset_table_knet22119_hp1_inst3000/dataset_summary.csv \\
-  --key-metrics outputs/strong_motion_qc_journal_evidence_packet_knet22119_hp1_inst3000/key_metrics.csv \\
+  --key-metrics outputs/strong_motion_qc_product_window_selector_knet22119_hp1_inst3000/summary.csv \\
   --product-impact outputs/strong_motion_qc_product_impact_knet22119_hp1_inst3000/product_impact_summary.csv \\
   --sensitivity outputs/strong_motion_qc_selector_sensitivity_knet22119_hp1_inst3000/sensitivity_summary.csv \\
   --response-spectrum outputs/strong_motion_qc_response_spectrum_knet22119_hp1_inst3000/summary.csv \\
   --draft manuscripts/strong_motion_qc_srl/strong_motion_qc_srl_draft.md \\
   --latex-pdf manuscripts/strong_motion_qc_srl/main.pdf \\
-  --outdir outputs/strong_motion_qc_srl_readiness_knet22119_hp1_inst3000
+  --outdir outputs/strong_motion_qc_srl_readiness
 
 python scripts/evaluate_strong_motion_pgv_retention.py \\
   --outdir outputs/strong_motion_qc_pgv_retention_knet22119_hp1_inst3000

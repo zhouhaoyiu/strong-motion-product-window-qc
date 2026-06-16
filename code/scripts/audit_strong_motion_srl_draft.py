@@ -11,12 +11,12 @@ import pandas as pd
 
 
 DEFAULT_DRAFT = "manuscripts/strong_motion_qc_srl/strong_motion_qc_srl_draft.md"
-DEFAULT_DATASET_SUMMARY = "outputs/strong_motion_qc_dataset_table/dataset_summary.csv"
-DEFAULT_SELECTOR_SUMMARY = "outputs/strong_motion_qc_product_window_selector/summary.csv"
-DEFAULT_SELECTOR_USAGE = "outputs/strong_motion_qc_product_window_selector/candidate_usage.csv"
-DEFAULT_PRODUCT_IMPACT = "outputs/strong_motion_qc_product_impact/product_impact_summary.csv"
-DEFAULT_SENSITIVITY = "outputs/strong_motion_qc_selector_sensitivity/sensitivity_summary.csv"
-DEFAULT_KEY_METRICS = "outputs/strong_motion_qc_journal_evidence_packet/key_metrics.csv"
+DEFAULT_DATASET_SUMMARY = "outputs/strong_motion_qc_dataset_table_knet22119_hp1_inst3000/dataset_summary.csv"
+DEFAULT_SELECTOR_SUMMARY = "outputs/strong_motion_qc_product_window_selector_knet22119_hp1_inst3000/summary.csv"
+DEFAULT_SELECTOR_USAGE = "outputs/strong_motion_qc_product_window_selector_knet22119_hp1_inst3000/candidate_usage.csv"
+DEFAULT_PRODUCT_IMPACT = "outputs/strong_motion_qc_product_impact_knet22119_hp1_inst3000/product_impact_summary.csv"
+DEFAULT_SENSITIVITY = "outputs/strong_motion_qc_selector_sensitivity_knet22119_hp1_inst3000/sensitivity_summary.csv"
+DEFAULT_KEY_METRICS = "outputs/strong_motion_qc_product_window_selector_knet22119_hp1_inst3000/summary.csv"
 DEFAULT_RESPONSE_SPECTRUM = "outputs/strong_motion_qc_response_spectrum_knet22119_hp1_inst3000/summary.csv"
 DEFAULT_OUTDIR = "outputs/strong_motion_qc_srl_draft_audit"
 
@@ -146,6 +146,10 @@ def build_number_audit(
     add_metric(rows, "InstanceGM_feature_energy_gain", f"{float(inst_feature['median_energy_gain']):.3f}", text, DEFAULT_PRODUCT_IMPACT)
     add_metric(rows, "InstanceGM_feature_duration_change", fmt_sec(inst_feature["median_duration_change_sec"]), text, DEFAULT_PRODUCT_IMPACT)
     add_metric(rows, "K-NET_feature_duration_change", fmt_sec(knet_feature["median_duration_change_sec"]), text, DEFAULT_PRODUCT_IMPACT)
+    add_metric(rows, "InstanceGM_feature_energy_loss_records", fmt_int(inst_feature["baseline_energy_loss_records"]), text, DEFAULT_PRODUCT_IMPACT)
+    add_metric(rows, "InstanceGM_feature_pga_loss_records", fmt_int(inst_feature["baseline_pga_loss_records"]), text, DEFAULT_PRODUCT_IMPACT)
+    add_metric(rows, "K-NET_feature_energy_loss_records", fmt_int(knet_feature["baseline_energy_loss_records"]), text, DEFAULT_PRODUCT_IMPACT)
+    add_metric(rows, "K-NET_feature_pga_loss_records", fmt_int(knet_feature["baseline_pga_loss_records"]), text, DEFAULT_PRODUCT_IMPACT)
 
     for ds in ["ALL", "InstanceGM", "K-NET"]:
         for energy in [0.95, 0.98]:

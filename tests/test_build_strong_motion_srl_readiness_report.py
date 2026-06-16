@@ -45,8 +45,8 @@ class StrongMotionSrlReadinessReportTests(unittest.TestCase):
         self.assertEqual(status["figure_files_present"], 2)
 
     def test_acceptance_band_is_conservative(self) -> None:
-        self.assertIn("82", report.acceptance_band(95))
-        self.assertIn("70%", report.acceptance_band(80))
+        self.assertIn("58-70%", report.acceptance_band(95))
+        self.assertIn("50-62%", report.acceptance_band(80))
         self.assertIn("blocking", report.acceptance_band(50))
 
     def test_pgv_and_record_audit_status_helpers(self) -> None:

@@ -10,11 +10,11 @@ import pandas as pd
 
 
 DEFAULT_AUDIT_DIR = "outputs/strong_motion_qc_srl_draft_audit"
-DEFAULT_FIGURE_MANIFEST = "outputs/strong_motion_qc_figures/figure_manifest.csv"
-DEFAULT_DATASET_SUMMARY = "outputs/strong_motion_qc_dataset_table/dataset_summary.csv"
-DEFAULT_KEY_METRICS = "outputs/strong_motion_qc_journal_evidence_packet/key_metrics.csv"
-DEFAULT_PRODUCT_IMPACT = "outputs/strong_motion_qc_product_impact/product_impact_summary.csv"
-DEFAULT_SENSITIVITY = "outputs/strong_motion_qc_selector_sensitivity/sensitivity_summary.csv"
+DEFAULT_FIGURE_MANIFEST = "outputs/strong_motion_qc_figures_knet22119_hp1_inst3000/figure_manifest.csv"
+DEFAULT_DATASET_SUMMARY = "outputs/strong_motion_qc_dataset_table_knet22119_hp1_inst3000/dataset_summary.csv"
+DEFAULT_KEY_METRICS = "outputs/strong_motion_qc_product_window_selector_knet22119_hp1_inst3000/summary.csv"
+DEFAULT_PRODUCT_IMPACT = "outputs/strong_motion_qc_product_impact_knet22119_hp1_inst3000/product_impact_summary.csv"
+DEFAULT_SENSITIVITY = "outputs/strong_motion_qc_selector_sensitivity_knet22119_hp1_inst3000/sensitivity_summary.csv"
 DEFAULT_RESPONSE_SPECTRUM = "outputs/strong_motion_qc_response_spectrum_knet22119_hp1_inst3000/summary.csv"
 DEFAULT_PGV_RETENTION = "outputs/strong_motion_qc_pgv_retention_knet22119_hp1_inst3000/summary.csv"
 DEFAULT_RECORD_AUDIT_DIR = "outputs/strong_motion_qc_record_audit_packet_knet22119_hp1_inst3000"
@@ -129,6 +129,14 @@ def record_audit_status(path: Path) -> dict[str, object]:
     }
 
 
+def selector_row(metrics: pd.DataFrame, dataset: str, method: str) -> pd.Series:
+    key = "policy" if "policy" in metrics.columns else "method"
+    filters = {"dataset": dataset, key: method}
+    if "priority_group" in metrics.columns:
+        filters["priority_group"] = "ALL"
+    return row_by(metrics, **filters)
+
+
 def readiness_checks(
     audit: dict[str, object],
     figures: dict[str, object],
@@ -145,9 +153,9 @@ def readiness_checks(
     pgv: dict[str, object],
     record_audit: dict[str, object],
 ) -> pd.DataFrame:
-    all_short = row_by(key_metrics, dataset="ALL", method="shortest_stable_no_catalog")
-    inst_fixed = row_by(key_metrics, dataset="InstanceGM", method="feature_onset_fixed")
-    knet_fixed = row_by(key_metrics, dataset="K-NET", method="feature_onset_fixed")
+    all_short = selector_row(key_metrics, dataset="ALL", method="shortest_stable_no_catalog")
+    inst_fixed = selector_row(key_metrics, dataset="InstanceGM", method="feature_onset_fixed")
+    knet_fixed = selector_row(key_metrics, dataset="K-NET", method="feature_onset_fixed")
     strict = row_by(sensitivity, dataset="ALL", priority_group="ALL", pga_threshold=0.99, energy_threshold=0.98)
     default = row_by(sensitivity, dataset="ALL", priority_group="ALL", pga_threshold=0.99, energy_threshold=0.95)
     spectrum_fixed_3s = row_by(
@@ -207,7 +215,7 @@ def readiness_checks(
         {
             "check": "selector_operational_summary",
             "status": "PASS" if float(all_short["full_record_fallback_pct"]) < 2.0 else "WARN",
-            "evidence": f"overall fallback {float(all_short['full_record_fallback_pct']):.2f}%",
+            "evidence": f"overall full-record assignment {float(all_short['full_record_fallback_pct']):.2f}%",
             "readiness_weight": 8,
         },
         {
@@ -220,7 +228,7 @@ def readiness_checks(
             "check": "threshold_sensitivity",
             "status": "PASS" if float(strict["full_record_fallback_pct"]) > float(default["full_record_fallback_pct"]) else "FAIL",
             "evidence": (
-                f"fallback rises from {float(default['full_record_fallback_pct']):.2f}% "
+                f"full-record assignment rises from {float(default['full_record_fallback_pct']):.2f}% "
                 f"to {float(strict['full_record_fallback_pct']):.2f}% when energy threshold changes 0.95->0.98"
             ),
             "readiness_weight": 8,
@@ -322,13 +330,13 @@ def compute_score(checks: pd.DataFrame) -> int:
 
 def acceptance_band(score: int) -> str:
     if score >= 95:
-        return "82-86% with public archive URL, access dates, and license statement included"
+        return "58-70% final-publication chance for SRL; packaging is complete, but contribution breadth remains the limiting risk"
     if score >= 90:
-        return "70-78% after final SRL formatting and advisor approval"
+        return "55-66% final-publication chance for SRL after advisor approval"
     if score >= 80:
-        return "65-72% with current evidence; 70% is plausible after format and reference polish"
+        return "50-62% final-publication chance; evidence is usable but needs clearer positioning"
     if score >= 70:
-        return "58-68%; more packaging or validation work is needed before calling it a 70% submission"
+        return "below 55%; more validation or reframing is needed"
     return "below 60%; the current package still has blocking risks"
 
 
@@ -337,7 +345,7 @@ def write_report(outdir: Path, checks: pd.DataFrame, score: int, band: str) -> N
     lines = [
         "# StrongMotion-QC SRL Readiness Report",
         "",
-        "This is an internal readiness estimate, not a statistical acceptance model.",
+        "This is an internal packaging and argument-readiness estimate, not a statistical acceptance model.",
         "",
         f"- Readiness score: {score}/100",
         f"- Current acceptance band: {band}",
