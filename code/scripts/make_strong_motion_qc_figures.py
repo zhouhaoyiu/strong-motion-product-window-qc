@@ -110,7 +110,7 @@ def figure_workflow(outdir: Path, formats: list[str]) -> list[Path]:
     import matplotlib.pyplot as plt
     from matplotlib.patches import FancyArrowPatch, FancyBboxPatch, Rectangle
 
-    fig, ax = plt.subplots(figsize=(7.4, 3.25), constrained_layout=True)
+    fig, ax = plt.subplots(figsize=(7.4, 3.35), constrained_layout=True)
     ax.axis("off")
 
     def panel(x: float, y: float, w: float, h: float, title: str) -> None:
@@ -127,76 +127,99 @@ def figure_workflow(outdir: Path, formats: list[str]) -> list[Path]:
         )
         ax.text(x + 0.02, y + h - 0.055, title, ha="left", va="center", fontsize=8.7, fontweight="bold")
 
-    panel(0.04, 0.54, 0.23, 0.34, text("1  Waveform record", "1  波形记录"))
+    panel(0.04, 0.57, 0.23, 0.32, text("1  Waveform record", "1  波形记录"))
     t = np.linspace(0, 1, 180)
     signal = 0.018 * np.sin(20 * np.pi * t)
     signal += 0.13 * np.exp(-((t - 0.48) ** 2) / 0.018) * np.sin(55 * np.pi * t)
     x = 0.065 + 0.18 * t
-    y = 0.67 + signal
+    y = 0.70 + signal
     ax.plot(x, y, color="#222222", lw=0.9)
     for xx, label in [(0.125, text("onset", "起点")), (0.185, text("peak", "峰值"))]:
-        ax.plot([xx, xx], [0.585, 0.79], color="#555555", lw=0.8, ls="--")
-        ax.text(xx, 0.575, label, ha="center", va="top", fontsize=7.2)
+        ax.plot([xx, xx], [0.61, 0.82], color="#555555", lw=0.8, ls="--")
+        ax.text(xx, 0.602, label, ha="center", va="top", fontsize=7.2)
 
-    panel(0.34, 0.54, 0.27, 0.34, text("2  Candidate windows", "2  候选处理窗"))
-    ax.plot([0.375, 0.575], [0.64, 0.64], color="#222222", lw=0.8)
+    panel(0.34, 0.57, 0.27, 0.32, text("2  Candidate windows", "2  候选处理窗"))
+    ax.plot([0.37, 0.575], [0.66, 0.66], color="#222222", lw=0.8)
     candidates = [
-        (text("fixed", "固定窗"), 0.39, 0.71, 0.095, "#d9d9d9"),
-        (text("adaptive", "适应性窗"), 0.39, 0.66, 0.145, "#bdbdbd"),
-        (text("full", "全记录"), 0.375, 0.59, 0.20, "#ffffff"),
+        (text("fixed", "固定窗"), 0.37, 0.455, 0.73, 0.075, "#d9d9d9"),
+        (text("adaptive", "适应性窗"), 0.37, 0.455, 0.685, 0.115, "#bdbdbd"),
+        (text("full record", "全记录"), 0.37, 0.455, 0.62, 0.135, "#ffffff"),
     ]
-    for label, x0, y0, width, face in candidates:
+    for label, label_x, x0, y0, width, face in candidates:
+        ax.text(label_x, y0 + 0.014, label, ha="left", va="center", fontsize=7.6)
         ax.add_patch(Rectangle((x0, y0), width, 0.028, facecolor=face, edgecolor="#222222", lw=0.7))
-        ax.text(x0 + width + 0.012, y0 + 0.014, label, ha="left", va="center", fontsize=7.6)
-    ax.text(0.475, 0.79, text("same record, multiple windows", "同一记录，多种候选窗"), ha="center", va="center", fontsize=7.5)
+    ax.text(0.475, 0.80, text("same record, multiple windows", "同一记录，多种候选窗"), ha="center", va="center", fontsize=7.5)
 
-    panel(0.68, 0.54, 0.26, 0.34, text("3  Product audit", "3  产品审计"))
+    panel(0.68, 0.57, 0.26, 0.32, text("3  Product audit", "3  产品审计"))
     audit_rows = [
-        (text("PGA ratio", "PGA比值"), r"$\geq$ 0.99"),
-        (text("Energy ratio", "能量比值"), r"$\geq$ 0.95"),
+        (text("PGA ratio", "PGA保留率"), r"$\geq$ 0.99"),
+        (text("Energy ratio", "能量保留率"), r"$\geq$ 0.95"),
         (text("Peak time", "峰值时刻"), text("inside", "在窗内")),
     ]
     for idx, (left, right) in enumerate(audit_rows):
-        yy = 0.76 - idx * 0.065
+        yy = 0.775 - idx * 0.062
         ax.plot([0.705, 0.915], [yy - 0.027, yy - 0.027], color="#d0d0d0", lw=0.5)
         ax.text(0.71, yy, left, ha="left", va="center", fontsize=7.9)
         ax.text(0.91, yy, right, ha="right", va="center", fontsize=7.9)
 
     ax.add_patch(
         FancyBboxPatch(
-            (0.22, 0.18),
+            (0.39, 0.28),
             0.22,
-            0.17,
+            0.16,
             boxstyle="round,pad=0.014,rounding_size=0.012",
             linewidth=0.9,
             edgecolor="#222222",
             facecolor="#ffffff",
         )
     )
-    ax.text(0.33, 0.285, text("select shortest\nstable candidate", "选择最短\n稳定候选"), ha="center", va="center", fontsize=8.8)
-    ax.text(0.33, 0.215, text("record selected window", "输出处理窗"), ha="center", va="center", fontsize=7.5)
+    ax.text(0.50, 0.385, text("4  Selection rule", "4  选窗规则"), ha="center", va="center", fontsize=8.8, fontweight="bold")
+    ax.text(
+        0.50,
+        0.325,
+        text("rank passed candidates\nby duration", "通过候选按窗长排序"),
+        ha="center",
+        va="center",
+        fontsize=7.5,
+    )
 
     ax.add_patch(
         FancyBboxPatch(
-            (0.58, 0.18),
+            (0.10, 0.12),
             0.22,
-            0.17,
+            0.15,
+            boxstyle="round,pad=0.014,rounding_size=0.012",
+            linewidth=0.9,
+            edgecolor="#222222",
+            facecolor="#ffffff",
+        )
+    )
+    ax.text(0.21, 0.215, text("shortest stable\ncandidate", "最短稳定候选"), ha="center", va="center", fontsize=8.4)
+    ax.text(0.21, 0.155, text("selected window", "输出处理窗"), ha="center", va="center", fontsize=7.3)
+
+    ax.add_patch(
+        FancyBboxPatch(
+            (0.69, 0.12),
+            0.22,
+            0.15,
             boxstyle="round,pad=0.014,rounding_size=0.012",
             linewidth=0.9,
             edgecolor="#222222",
             facecolor="#f0f0f0",
         )
     )
-    ax.text(0.69, 0.285, text("full record", "全记录"), ha="center", va="center", fontsize=8.8, fontweight="bold")
-    ax.text(0.69, 0.215, text("assigned if no\ncandidate passes", "候选均失败\n则分配全记录"), ha="center", va="center", fontsize=7.5)
+    ax.text(0.80, 0.215, text("full record", "全记录"), ha="center", va="center", fontsize=8.4, fontweight="bold")
+    ax.text(0.80, 0.155, text("if no candidate passes", "无候选通过时采用"), ha="center", va="center", fontsize=7.3)
 
     arrow_style = dict(arrowstyle="->", mutation_scale=10, lw=0.95, color="#222222")
-    ax.add_patch(FancyArrowPatch((0.275, 0.71), (0.34, 0.71), **arrow_style))
-    ax.add_patch(FancyArrowPatch((0.61, 0.71), (0.68, 0.71), **arrow_style))
-    ax.add_patch(FancyArrowPatch((0.755, 0.54), (0.43, 0.31), connectionstyle="arc3,rad=-0.18", **arrow_style))
-    ax.add_patch(FancyArrowPatch((0.815, 0.54), (0.64, 0.34), connectionstyle="arc3,rad=0.12", **arrow_style))
-    ax.text(0.51, 0.39, text("pass", "通过"), ha="center", va="center", fontsize=7.7)
-    ax.text(0.74, 0.39, text("none pass", "均未通过"), ha="center", va="center", fontsize=7.7)
+    ax.add_patch(FancyArrowPatch((0.275, 0.73), (0.34, 0.73), **arrow_style))
+    ax.add_patch(FancyArrowPatch((0.61, 0.73), (0.68, 0.73), **arrow_style))
+    ax.add_patch(FancyArrowPatch((0.81, 0.57), (0.56, 0.44), connectionstyle="arc3,rad=0.0", **arrow_style))
+    ax.add_patch(FancyArrowPatch((0.39, 0.35), (0.31, 0.235), connectionstyle="arc3,rad=0.12", **arrow_style))
+    ax.add_patch(FancyArrowPatch((0.61, 0.35), (0.70, 0.235), connectionstyle="arc3,rad=-0.12", **arrow_style))
+    label_box = {"facecolor": "white", "edgecolor": "none", "pad": 0.6}
+    ax.text(0.38, 0.265, text("passed candidate", "有通过候选"), ha="center", va="center", fontsize=7.3, bbox=label_box)
+    ax.text(0.63, 0.265, text("none pass", "均未通过"), ha="center", va="center", fontsize=7.3, bbox=label_box)
 
     ax.set_xlim(-0.02, 1.04)
     ax.set_ylim(0, 1)
