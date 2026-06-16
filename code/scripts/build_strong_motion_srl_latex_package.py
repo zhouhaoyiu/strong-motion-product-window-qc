@@ -32,7 +32,7 @@ FIGURES = [
     ),
     (
         "smqc_figure_03_selector_duration_fallback.pdf",
-        "Selected-window duration and full-record fallback rate for the shortest-stable selector. The selector chooses longer typical windows for InstanceGM and shorter typical windows for K-NET. Full-record fallback remains low at the default PGA-retention and energy-retention criteria.",
+        "Selected-window duration and full-record assignment rate for the shortest-stable selector. The selector chooses longer typical windows for InstanceGM and shorter typical windows for K-NET. Only a small fraction of records are assigned to the full interval under the default PGA-retention and energy-retention criteria.",
     ),
     (
         "smqc_figure_04_product_impact_recovery.pdf",
@@ -40,7 +40,7 @@ FIGURES = [
     ),
     (
         "smqc_figure_05_threshold_sensitivity.pdf",
-        "Sensitivity of the shortest-stable selector to the energy-retention criterion with the PGA-retention criterion fixed at 0.99. The default 0.95 energy-retention criterion keeps fallback low. A stricter 0.98 energy-retention criterion substantially increases full-record fallback, especially for InstanceGM.",
+        "Sensitivity of the shortest-stable selector to the energy-retention criterion with the PGA-retention criterion fixed at 0.99. The default 0.95 energy-retention criterion keeps full-record assignment rare. A stricter 0.98 energy-retention criterion substantially increases full-record assignment, especially for InstanceGM.",
     ),
     (
         "smqc_figure_06_response_spectrum_retention.pdf",
@@ -287,7 +287,7 @@ def make_table_2(selector_path: Path) -> str:
     rows = [
         r"\begin{tabular}{llrrrr}",
         r"\toprule",
-        r"Dataset & Policy & Unstable (\%) & Median window (s) & p05 energy & Fallback (\%) \\",
+        r"Dataset & Policy & Unstable (\%) & Median window (s) & p05 energy & Full record (\%) \\",
         r"\midrule",
     ]
     for dataset in ["InstanceGM", "K-NET"]:
@@ -402,9 +402,9 @@ def insert_display_items(body_md: str, table_chunks: list[str]) -> str:
         ("(Table 1).", ["TABLE_1"]),
         ("It is retained in the full audit and reported as a data-availability note.", ["TABLE_2"]),
         ("median adaptive duration is 84.12 s for InstanceGM and 24.66 s for K-NET.", ["FIGURE_2", "TABLE_3"]),
-        ("duration are the operational summaries.", ["FIGURE_3"]),
+        ("assignment rate and duration summarize the operating cost.", ["FIGURE_3"]),
         ("energy is retained.", ["FIGURE_4"]),
-        ("The threshold is a visible design parameter recorded by the sensitivity analysis.", ["FIGURE_5"]),
+        ("retention yields a more conservative selector and substantially more full-record assignments.", ["FIGURE_5"]),
         ("0.02%, 0.87%, and 5.56%, corresponding to 9, 465, and 2,972 records.", ["FIGURE_6", "TABLE_4"]),
     ]
     updated = body_md

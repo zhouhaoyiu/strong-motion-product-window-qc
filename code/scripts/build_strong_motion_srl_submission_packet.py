@@ -86,7 +86,7 @@ We submit the manuscript "Auditable Product-Stable Window Selection for Strong-M
 
 The manuscript addresses a practical strong-motion processing problem: fixed processing windows can preserve peak motion, waveform energy, and response-spectrum quantities unevenly across archives. We evaluate this problem on 53,463 three-component records from InstanceGM and K-NET, then test an offline waveform-derived selector that chooses the shortest candidate window passing explicit product-retention checks.
 
-The main contribution is an auditable product-window policy for strong-motion product preparation. The selector has 0.84% full-record fallback overall and distinct median selected-window durations for InstanceGM and K-NET. A 5% damping response-spectrum audit shows that overall 3.0 s PSA-retention failures drop from 32.28% for feature-onset fixed windows to 5.56% for selected windows.
+The main contribution is an auditable product-window policy for strong-motion product preparation. Only 0.84% of records are assigned to full-record processing under the default criteria, and the selected-window duration differs by archive: 84.94 s for InstanceGM and 24.66 s for K-NET. A 5% damping response-spectrum audit shows that overall 3.0 s PSA-retention failures drop from 32.28% for feature-onset fixed windows to 5.56% for selected windows.
 
 The manuscript is framed as a quality-control method for strong-motion product generation. The scope is offline archive and batch product preparation: processing-window selection is evaluated against full-record products before product tables are exported. The submission does not claim phase-picking performance, real-time warning capability, learned-model superiority, or replacement of human review.
 
@@ -380,6 +380,8 @@ def packet_files(
             files.append(PacketFile(figure, Path("figures/record_audit") / figure.name, "Representative record-level audit figure"))
     for figure in sorted(figure_dir.glob("smqc_figure_*.pdf")):
         files.append(PacketFile(figure, Path("figures") / figure.name, "Figure PDF"))
+    for figure in sorted((chinese_manuscript_dir / "figures").glob("smqc_figure_*.pdf")):
+        files.append(PacketFile(figure, Path("chinese_review/figures") / figure.name, "Chinese advisor-review figure PDF"))
     for table in sorted((manuscript_dir / "tables").glob("table_*.tex")):
         files.append(PacketFile(table, Path("tables") / table.name, "LaTeX table source"))
     return files
