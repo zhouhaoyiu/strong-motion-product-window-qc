@@ -105,23 +105,9 @@ def data_resources_statement(metadata_path: Path) -> str:
     return """
 # Data and Resources Statement Draft
 
-This study uses locally cached waveform records from the public InstanceGM/INSTANCE data family and K-NET strong-motion records operated by the National Research Institute for Earth Science and Disaster Resilience (NIED). K-NET waveforms were converted with explicit UD -> Z, NS -> N, and EW -> E component mapping. K-NET waveform features use 1 Hz high-pass preprocessing before the product-window audit.
+Waveforms from the InstanceGM/INSTANCE data family and K-NET were used in this study. K-NET waveforms were converted with explicit UD -> Z, NS -> N, and EW -> E component mapping, and K-NET waveform features were computed after 1 Hz high-pass preprocessing.
 
-The current audit artifacts are generated under the following local directories:
-
-- `outputs/strong_motion_qc_full_manifest_knet22119/`
-- `outputs/strong_motion_qc_worklist_knet22119_inst3000/`
-- `outputs/strong_motion_qc_waveform_features_knet22119_hp1_inst3000/`
-- `outputs/strong_motion_qc_window_stability_knet22119_hp1_inst3000/`
-- `outputs/strong_motion_qc_product_window_selector_knet22119_hp1_inst3000/`
-- `outputs/strong_motion_qc_product_impact_knet22119_hp1_inst3000/`
-- `outputs/strong_motion_qc_selector_sensitivity_knet22119_hp1_inst3000/`
-- `outputs/strong_motion_qc_response_spectrum_knet22119_hp1_inst3000/`
-- `outputs/strong_motion_qc_pgv_retention_knet22119_hp1_inst3000/`
-- `outputs/strong_motion_qc_record_audit_packet_knet22119_hp1_inst3000/`
-- `outputs/strong_motion_qc_figures_knet22119_hp1_inst3000/`
-
-The source code used to generate the audit and manuscript package is in the repository scripts and `strong_motion_qc/` package. The public reproducibility release is archived at https://github.com/zhouhaoyiu/strong-motion-product-window-qc/releases/tag/v0.1.0. InstanceGM/INSTANCE data were accessed on 2026-06-16, K-NET/NIED data were accessed on 2026-06-16, and the public code/data archive was accessed on 2026-06-16.
+The public reproducibility release is archived at https://github.com/zhouhaoyiu/strong-motion-product-window-qc/releases/tag/v0.1.0. The release contains source code, focused tests, manifest and worklist files, waveform-feature summaries, window-stability summaries, selector summaries, product-impact summaries, threshold-sensitivity summaries, response-spectrum audits, record-level audit cases, figure sources, checksums, and command logs. InstanceGM/INSTANCE data were accessed through https://doi.org/10.13127/INSTANCE on 2026-06-16. K-NET/NIED data were accessed through https://doi.org/10.17598/NIED.0004 on 2026-06-16. Raw waveform archives are not redistributed and remain subject to provider terms. Code and focused tests are released under the MIT License; derived summaries, figures, record-audit plots, manuscript-support metadata, and documentation are released under CC BY 4.0.
 
 {ai_disclosure}
 """.format(ai_disclosure=ai_disclosure)
@@ -286,7 +272,7 @@ Checked against the Seismological Society of America SRL author instructions cur
 - References are arranged alphabetically by first author and restricted to cited published works or citable data resources.
 - Data and Resources precedes Acknowledgments.
 - Declaration of Competing Interests is present.
-- Data/resource URLs and last-access month/year remain final manual fields until the public archive is created.
+- Public archive URL, data/resource access dates, and release-license statement are complete.
 - A flat LaTeX upload bundle is included at `manuscript_flat/`; it keeps `main.tex` and figure PDFs in one directory and avoids figure subdirectory references.
 """
 

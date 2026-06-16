@@ -342,13 +342,15 @@ cross-dataset sensitivity, and engineering-product retention checks.
 
 ## Data and Resources
 
-The audit uses locally cached InstanceGM records and K-NET waveforms converted
-with explicit UD -> Z, NS -> N, and EW -> E component mapping. K-NET waveform
-features use 1 Hz high-pass preprocessing. The reproducibility packet contains
-the full manifest, worklist, waveform-feature tables, window-stability tables,
-selector summaries, product-impact summaries, threshold-sensitivity summaries,
-response-spectrum audits, record-level audit cases, figure sources, and command
-log. The public release is archived at
+Waveforms from the InstanceGM/INSTANCE data family and K-NET were used in this
+study. K-NET waveforms were converted with explicit UD -> Z, NS -> N, and
+EW -> E component mapping, and K-NET waveform features were computed after
+1 Hz high-pass preprocessing. The reproducibility release contains the source
+code, focused tests, manifest and worklist files, waveform-feature summaries,
+window-stability summaries, selector summaries, product-impact summaries,
+threshold-sensitivity summaries, response-spectrum audits, record-level audit
+cases, figure sources, checksums, and command log. The public release is
+archived at
 https://github.com/zhouhaoyiu/strong-motion-product-window-qc/releases/tag/v0.1.0.
 InstanceGM/INSTANCE data were accessed through https://doi.org/10.13127/INSTANCE
 on 16 June 2026. K-NET/NIED data were accessed through

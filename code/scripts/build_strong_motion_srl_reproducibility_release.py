@@ -274,7 +274,7 @@ This lightweight release supports the manuscript "Auditable Product-Stable Windo
 - `metadata/file_checksums.csv`: SHA-256 checksums for copied release files.
 - `metadata/data_source_manifest.csv`: data-source and upload-boundary notes.
 - `LICENSE`: license boundary for code, derived summaries, and third-party data.
-- `ARCHIVE_METADATA_TEMPLATE.md`: final public-archive metadata template.
+- `ARCHIVE_METADATA_TEMPLATE.md`: public archive metadata summary.
 
 ## Data Boundary
 
