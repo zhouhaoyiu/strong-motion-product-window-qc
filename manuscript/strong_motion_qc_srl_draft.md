@@ -13,19 +13,19 @@ waveform energy, and inclusion of the full-record peak time. Fixed 42.00 s
 windows show strong dataset dependence. On InstanceGM, feature-onset,
 energy-onset, and catalog-P fixed windows have instability rates of 81.25%,
 69.91%, and 73.03%. On K-NET, the same windows have instability rates of
-4.15%, 3.10%, and 8.25%. We then evaluate a waveform-derived selector that
-chooses the shortest candidate passing the product checks and assigns the full
+4.15%, 3.10%, and 8.25%. Within this audit, a waveform-derived rule
+chooses the shortest candidate that passes the product checks and assigns the full
 record only when every shorter candidate fails. Only 0.84% of records are
 assigned to full-record processing, with median selected-window durations of
-84.94 s for InstanceGM and 24.66 s for K-NET. The selector recovers 25,468 InstanceGM
+84.94 s for InstanceGM and 24.66 s for K-NET. The rule recovers 25,468 InstanceGM
 feature-onset fixed-window failures and 21,913 InstanceGM energy-onset
 fixed-window failures under the same audit. A 5% damping response-spectrum
 audit gives overall PSA-retention failure rates of 12.98%, 22.26%, and 32.28%
 for feature-onset fixed windows at 0.2 s, 1.0 s, and 3.0 s. The
-shortest-stable selector reduces the same rates to 0.02%, 0.87%, and 5.56%
+shortest-stable rule reduces the same rates to 0.02%, 0.87%, and 5.56%
 (9, 465, and 2,972 records). Threshold tests make the operating trade-off
 explicit: the 0.95 energy-retention criterion keeps full-record assignment
-rare, whereas a 0.98 criterion raises the overall assignment rate to 46.84%.
+rare; a 0.98 criterion raises the overall assignment rate to 46.84%.
 An external PNWAccelerometers check and a production-style routing case test
 how the same audit transfers to a third archive and to batch product
 preparation. The results define a reproducible offline quality-control workflow
@@ -38,8 +38,8 @@ engineering and seismological products. A fixed 42.00 s window can lose useful
 motion in one archive and include more time than needed in another. We test
 windows by checking whether they keep the full-record peak motion, enough
 waveform energy, and the time of the full-record peak. A simple offline
-selector chooses the shortest candidate window that passes these checks. The
-selector gives longer typical windows for InstanceGM and shorter typical
+rule chooses the shortest candidate window that passes these checks. The
+rule gives longer typical windows for InstanceGM and shorter typical
 windows for K-NET, with rare full-record assignment at the stated thresholds.
 
 ## Introduction
@@ -79,7 +79,7 @@ audits that question directly.
 In a production strong-motion workflow, the window is a record-level processing
 decision made before product tables are exported. The same interval supports
 peak values, response spectra, energy-like measures, duration measures, and
-later review of flagged records. A useful selector keeps product-relevant
+later review of flagged records. A useful quality-control rule keeps product-relevant
 motion, exposes the records that need full-record processing, and leaves an audit
 trail that can be checked after archive updates. Response spectra and duration
 measures are standard engineering products, which makes window retention a
@@ -134,7 +134,7 @@ K-NET waveform representation used in the project and separates raw
 acceleration offsets from product-window behavior. Strong-motion filtering and
 baseline choices can alter downstream amplitudes and spectra, so preprocessing
 is kept explicit (Boore, 2001; Douglas and Boore, 2011). Catalog P times
-support comparator windows and diagnostics. The main selector uses
+support comparator windows and diagnostics. The main rule uses
 waveform-derived candidates.
 
 We add PNWAccelerometers as a third-party external check after the primary
@@ -164,7 +164,7 @@ These features define five candidate window families:
 5. Full record: the complete record, used as the upper-bound processing
    interval.
 
-The main selector considers feature-onset fixed, energy-onset fixed, and
+The main rule considers feature-onset fixed, energy-onset fixed, and
 adaptive energy-end candidates. Catalog-P fixed windows remain in the audit as
 arrival-time-based comparators.
 
@@ -187,15 +187,19 @@ t_{\mathrm{peak,full}} \in w .
 
 The energy term follows the Arias-style idea of integrating squared motion over
 time, applied here as a relative vector-signal energy criterion (Arias, 1970).
-The threshold sensitivity analysis repeats the selector with alternative
-energy-retention criteria.
+The thresholds are operating quality-control parameters that travel with the
+reported results. We use 0.99 PGA retention and 0.95 energy retention as the main
+reporting setting because they preserve the dominant product quantities while
+keeping full-record assignment rare. The sensitivity test reports the cost of
+tightening the energy criterion to 0.98. An agency can change these thresholds
+with the same audit fields.
 
-### Shortest-Stable Selector
+### Shortest-Stable Rule
 
-For each record, the selector filters candidate windows by the three
+For each record, the rule filters candidate windows by the three
 product-stability checks, ranks the stable non-full candidates by duration, and
 chooses the shortest one. If the filter yields no stable non-full candidate,
-the selector assigns the full record. In compact form,
+the rule assigns the full record. In compact form,
 
 \[
 w^* = \arg\min_{w \in C_{\mathrm{record}}}
@@ -221,7 +225,7 @@ window has a PSA-retention failure when
 \frac{PSA_{\mathrm{win}}(T)}{PSA_{\mathrm{full}}(T)} < 0.95 .
 \]
 
-This audit is separate from the selector. The selector uses PGA retention,
+This audit is separate from the window rule. The rule uses PGA retention,
 relative energy retention, and peak-time inclusion; the response-spectrum
 check evaluates whether those selected windows also preserve period-dependent
 motion measures.
@@ -245,16 +249,16 @@ median adaptive duration is 84.12 s for InstanceGM and 24.66 s for K-NET.
 
 The M3-M4 strata show the same dataset contrast (Table 3). In InstanceGM M3-M4
 records, feature-onset and energy-onset fixed windows have instability rates of
-77.19% and 61.01%. The selector assigns 1.79% of records to the full interval and has a median
+77.19% and 61.01%. The rule assigns 1.79% of records to the full interval and has a median
 selected duration of 71.14 s in the same stratum. In K-NET M3-M4 records,
 feature-onset and energy-onset fixed windows have instability rates of 1.63%
-and 1.61%. The selector assigns 0.30% of records to the full interval and has a median selected duration of
+and 1.61%. The rule assigns 0.30% of records to the full interval and has a median selected duration of
 19.39 s. The windowing issue follows archive and waveform-scale behavior.
 Magnitude strata provide an internal check on that pattern.
 
-### Shortest-Stable Selection Preserves Products with Limited Full-Record Assignment
+### Shortest-Stable Rule Preserves Products with Limited Full-Record Assignment
 
-The shortest-stable selector assigns 0.84% of records to full-record
+The shortest-stable rule assigns 0.84% of records to full-record
 processing under the default product-stability criteria (Figure 3; Table 3).
 Dataset-level full-record assignment is 1.31% for InstanceGM and 0.18% for
 K-NET. The full audit contains 451 records assigned to the full interval,
@@ -264,14 +268,14 @@ three product-retention checks by design; assignment rate and duration
 summarize the operating cost.
 
 Candidate usage follows the dataset-scale difference. On InstanceGM,
-the selector chooses the adaptive energy-end candidate for 84.86% of records
+the rule chooses the adaptive energy-end candidate for 84.86% of records
 and the energy-onset fixed candidate for 13.52%. On K-NET, it chooses the
 adaptive energy-end candidate for 97.26% and the energy-onset fixed candidate
 for 2.44%. Full-record assignment occurs for 0.84% of all records.
 
 ### Product Impact Relative to Fixed Baselines
 
-The selector changes product retention and selected-window length relative to fixed
+The rule changes product retention and selected-window length relative to fixed
 baselines (Figure 4). On InstanceGM, it resolves 25,468
 feature-onset fixed-window failures, 21,913 energy-onset fixed-window failures,
 and 22,889 catalog-P fixed-window failures under the product-retention audit.
@@ -280,7 +284,7 @@ The median energy-retention gain relative to feature-onset fixed windows is
 many InstanceGM fixed windows end before sufficient product-relevant energy is
 retained.
 
-K-NET has fewer fixed-window failures. The selector resolves 917
+K-NET has fewer fixed-window failures. The rule resolves 917
 feature-onset fixed-window failures, 686 energy-onset fixed-window failures,
 and 847 catalog-P fixed-window failures. The median duration change relative
 to feature-onset fixed windows is -17.31 s. The adaptive energy-end candidate
@@ -289,13 +293,13 @@ often passes the product-retention checks with a shorter window than the
 
 ### Threshold Sensitivity
 
-The selector is sensitive to the energy-retention criterion (Figure 5). With
+The rule is sensitive to the energy-retention criterion (Figure 5). With
 \(PGA \geq 0.99\) and \(E \geq 0.95\), the overall full-record assignment
 rate is 0.84%. Tightening energy retention to 0.98 raises the rate to 46.84%
 overall. InstanceGM full-record assignment increases from 1.31% at 0.95 energy
 retention to 71.84% at 0.98. K-NET assignment increases from 0.18% to 11.42%.
 The sensitivity analysis makes this trade-off explicit: stricter energy
-retention yields a more conservative selector and substantially more
+retention yields a more conservative rule and substantially more
 full-record assignments.
 
 ### Response-Spectrum Retention
@@ -303,12 +307,12 @@ full-record assignments.
 The response-spectrum audit strengthens the product-window interpretation
 (Figure 6; Table 4). Across all 53,463 records, feature-onset fixed windows
 have PSA-retention failure rates of 12.98%, 22.26%, and 32.28% at 0.2 s,
-1.0 s, and 3.0 s. The shortest-stable selector reduces the same rates to
+1.0 s, and 3.0 s. The shortest-stable rule reduces the same rates to
 0.02%, 0.87%, and 5.56%, corresponding to 9, 465, and 2,972 records.
 
 The 3.0 s period exposes the main residual risk. On InstanceGM, feature-onset
-fixed windows have 51.83% PSA-retention failures at 3.0 s, and the selector
-has 6.42%. On K-NET, the same comparison is 4.59% and 4.34%. The selector
+fixed windows have 51.83% PSA-retention failures at 3.0 s, and the rule
+has 6.42%. On K-NET, the same comparison is 4.59% and 4.34%. The rule
 substantially improves long-period retention for InstanceGM without increasing
 K-NET losses. This result clarifies the engineering relevance of the spectrum
 audit: short-period and intermediate-period products are largely preserved
@@ -323,13 +327,13 @@ The PNWAccelerometers audit shows how the same criteria behave on a third
 public strong-motion archive. Fixed 42.00 s windows are a poor match for this
 cache: feature-onset, energy-onset, and catalog-P fixed windows fail the
 product-stability audit for 91.99%, 91.88%, and 90.34% of 6,107 records. The
-shortest-stable selector assigns 10.58% of records to full-record processing
+shortest-stable rule assigns 10.58% of records to full-record processing
 and selects a median duration of 142.93 s. Most accepted non-full records use
 the adaptive energy-end candidate.
 
 The response-spectrum audit gives the same operational message. For
 feature-onset fixed windows, PNW PSA-retention failures are 82.72%, 45.67%, and
-42.31% at 0.2 s, 1.0 s, and 3.0 s. The shortest-stable selector reduces those
+42.31% at 0.2 s, 1.0 s, and 3.0 s. The shortest-stable rule reduces those
 rates to 0.02%, 3.59%, and 9.53%. The PNW result is reported outside the
 primary denominator and exposes an external archive that needs long windows or
 full-record processing for product-stable output.
@@ -347,8 +351,8 @@ acceptance, 1,097 records (1.84%) route to full-record processing, and 3,554
 records (5.97%) route to long-period PSA review. The dataset split clarifies
 the workload source: PNWAccelerometers contributes 646 of the 1,097 full-record
 routes and 582 of the 3,554 long-period PSA review routes. This table is a
-reproducible product-preparation worklist. It is not a measured human-review
-time study.
+reproducible product-preparation worklist; measured human-review time requires
+a separate operator study.
 
 ## Discussion
 
@@ -356,7 +360,7 @@ The results show that strong-motion processing windows need product-retention
 checks together with selected-window length. InstanceGM and K-NET show distinct
 window scales under a common audit. A fixed 42.00 s window is too short for many
 InstanceGM records and longer than needed for many K-NET records. The
-product-check selector adapts to that difference, and its operating cost is
+product-check rule adapts to that difference, and its operating cost is
 summarized by full-record assignment and selected duration.
 
 The dominant failure mechanism is energy truncation. In InstanceGM, all 25,468
@@ -376,7 +380,7 @@ archive updates.
 
 The record-level audit packet connects the aggregate results to practical
 review. It includes examples where fixed windows miss late product-relevant
-motion and the selector restores retention, examples where K-NET records keep
+motion and the rule restores retention, examples where K-NET records keep
 the product checks with compact windows, and boundary cases assigned to the full
 record. These cases let an operator inspect why a record received its processing
 window without using hidden labels or manual arrival picks.
@@ -387,7 +391,7 @@ is evaluated against full-record products. The 0.95 energy-retention criterion
 is a design parameter supported by the sensitivity analysis. A stricter 0.98
 criterion pushes many InstanceGM records to full-record processing. The
 response-spectrum audit adds an engineering-product check and shows that the
-selector retains most 0.2-3.0 s PSA values, with the largest residual loss at
+rule retains most 0.2-3.0 s PSA values, with the largest residual loss at
 3.0 s. The remaining 3.0 s failures identify records that need conservative
 handling for long-period spectral products. The selected windows still give a
 large product-level gain at 0.2 s, 1.0 s, and most 3.0 s records. Future work
@@ -400,7 +404,7 @@ PNWAccelerometers long-window case.
 We evaluated product-stable window selection for 53,463 strong-motion records
 from InstanceGM and K-NET. Fixed 42.00 s windows show strong dataset
 dependence, with high instability on InstanceGM and much lower instability on
-K-NET. The shortest-stable selector uses waveform-derived candidates and
+K-NET. The shortest-stable rule uses waveform-derived candidates and
 product-retention checks to choose compact processing windows. Under the
 default audit, full-record assignment is 0.84% overall, while median selected
 duration differs sharply by dataset: 84.94 s for InstanceGM and 24.66 s for
@@ -427,7 +431,7 @@ K-NET waveforms were converted with explicit UD -> Z, NS -> N, and EW -> E
 component mapping, and K-NET waveform features were computed after 1 Hz
 high-pass preprocessing. The reproducibility release contains the source code,
 focused tests, manifest and worklist files, waveform-feature summaries,
-window-stability summaries, selector summaries, product-impact summaries,
+window-stability summaries, window-rule summaries, product-impact summaries,
 threshold-sensitivity summaries, response-spectrum audits, PNW external-audit
 summaries, production-routing outputs, record-level audit cases, figure
 sources, checksums, and command log. The public release is
@@ -469,18 +473,18 @@ Harbin, Heilongjiang, China; email: maqiang@iem.ac.cn.
 Figure 1. Workflow for offline product-stable window selection. Each waveform
 record is converted into candidate processing windows. Candidate windows are
 evaluated by retention of full-record PGA, relative energy, and inclusion of
-the full-record peak. The selector chooses the shortest stable non-full
+the full-record peak. The rule chooses the shortest stable non-full
 candidate and assigns the full record when no non-full candidate passes the
 product-retention checks.
 
 Figure 2. Product-window instability for fixed, adaptive, and selected windows
 on InstanceGM and K-NET records. Fixed 42.00 s windows fail frequently on
 InstanceGM and less often on K-NET, indicating dataset-dependent product
-retention. The shortest-stable selector removes product-retention failures
+retention. The shortest-stable rule removes product-retention failures
 under the stated audit because it filters candidates by the same criteria.
 
 Figure 3. Selected-window duration and full-record assignment rate for the
-shortest-stable selector. The selector chooses longer typical windows for
+shortest-stable rule. The rule chooses longer typical windows for
 InstanceGM and shorter typical windows for K-NET. Only a small fraction of
 records are assigned to the full interval under the default PGA-retention and
 energy-retention criteria.
@@ -490,7 +494,7 @@ fixed-window instability, median energy-retention gain, and selected-minus-
 baseline duration change for feature-onset, energy-onset, and catalog-P fixed
 windows.
 
-Figure 5. Sensitivity of the shortest-stable selector to the energy-retention
+Figure 5. Sensitivity of the shortest-stable rule to the energy-retention
 criterion with the PGA-retention criterion fixed at 0.99. The default 0.95
 energy-retention criterion keeps full-record assignment rare. A stricter 0.98
 criterion substantially increases full-record assignment, especially for
@@ -498,7 +502,7 @@ InstanceGM.
 
 Figure 6. Response-spectrum retention at 5% damping. Panels compare PSA-
 retention failure rates at 0.2 s, 1.0 s, and 3.0 s for fixed windows and the
-shortest-stable selector. The selected windows reduce overall PSA-retention
+shortest-stable rule. The selected windows reduce overall PSA-retention
 failures from 12.98%, 22.26%, and 32.28% for feature-onset fixed windows to
 0.02%, 0.87%, and 5.56%.
 

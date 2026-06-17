@@ -24,15 +24,15 @@ DEFAULT_METADATA = "docs/strong_motion_qc_srl_submission_metadata_template.csv"
 FIGURES = [
     (
         "smqc_figure_01_workflow.pdf",
-        "Workflow for offline product-stable window selection. Each waveform record is converted into candidate processing windows. Candidate windows are evaluated by retention of full-record PGA, relative energy, and inclusion of the full-record peak. The selector chooses the shortest stable non-full candidate and assigns the full record when no non-full candidate passes the product-retention checks.",
+        "Workflow for offline product-stable window selection. Each waveform record is converted into candidate processing windows. Candidate windows are evaluated by retention of full-record PGA, relative energy, and inclusion of the full-record peak. The rule chooses the shortest stable non-full candidate and assigns the full record when no non-full candidate passes the product-retention checks.",
     ),
     (
         "smqc_figure_02_fixed_window_failure.pdf",
-        "Product-window instability for fixed, adaptive, and selected windows on InstanceGM and K-NET records. Fixed 42.00 s windows fail frequently on InstanceGM and less often on K-NET, indicating dataset-dependent product retention. The shortest-stable selector removes product-retention failures under the stated audit because it filters candidates by the same criteria.",
+        "Product-window instability for fixed, adaptive, and selected windows on InstanceGM and K-NET records. Fixed 42.00 s windows fail frequently on InstanceGM and less often on K-NET, indicating dataset-dependent product retention. The shortest-stable rule removes product-retention failures under the stated audit because it filters candidates by the same criteria.",
     ),
     (
         "smqc_figure_03_selector_duration_fallback.pdf",
-        "Selected-window duration and full-record assignment rate for the shortest-stable selector. The selector chooses longer typical windows for InstanceGM and shorter typical windows for K-NET. Only a small fraction of records are assigned to the full interval under the default PGA-retention and energy-retention criteria.",
+        "Selected-window duration and full-record assignment rate for the shortest-stable rule. The rule chooses longer typical windows for InstanceGM and shorter typical windows for K-NET. Only a small fraction of records are assigned to the full interval under the default PGA-retention and energy-retention criteria.",
     ),
     (
         "smqc_figure_04_product_impact_recovery.pdf",
@@ -40,11 +40,11 @@ FIGURES = [
     ),
     (
         "smqc_figure_05_threshold_sensitivity.pdf",
-        "Sensitivity of the shortest-stable selector to the energy-retention criterion with the PGA-retention criterion fixed at 0.99. The default 0.95 energy-retention criterion keeps full-record assignment rare. A stricter 0.98 energy-retention criterion substantially increases full-record assignment, especially for InstanceGM.",
+        "Sensitivity of the shortest-stable rule to the energy-retention criterion with the PGA-retention criterion fixed at 0.99. The default 0.95 energy-retention criterion keeps full-record assignment rare. A stricter 0.98 energy-retention criterion substantially increases full-record assignment, especially for InstanceGM.",
     ),
     (
         "smqc_figure_06_response_spectrum_retention.pdf",
-        "Response-spectrum retention at 5% damping. Panels compare PSA-retention failure rates at 0.2 s, 1.0 s, and 3.0 s for fixed windows and the shortest-stable selector. The selected windows reduce overall PSA-retention failures from 12.98%, 22.26%, and 32.28% for feature-onset fixed windows to 0.02%, 0.87%, and 5.56%.",
+        "Response-spectrum retention at 5% damping. Panels compare PSA-retention failure rates at 0.2 s, 1.0 s, and 3.0 s for fixed windows and the shortest-stable rule. The selected windows reduce overall PSA-retention failures from 12.98%, 22.26%, and 32.28% for feature-onset fixed windows to 0.02%, 0.87%, and 5.56%.",
     ),
 ]
 PRIORITY_GROUP_LABELS = {
@@ -404,7 +404,7 @@ def insert_display_items(body_md: str, table_chunks: list[str]) -> str:
         ("median adaptive duration is 84.12 s for InstanceGM and 24.66 s for K-NET.", ["FIGURE_2", "TABLE_3"]),
         ("assignment rate and duration summarize the operating cost.", ["FIGURE_3"]),
         ("energy is retained.", ["FIGURE_4"]),
-        ("retention yields a more conservative selector and substantially more full-record assignments.", ["FIGURE_5"]),
+        ("retention yields a more conservative rule and substantially more full-record assignments.", ["FIGURE_5"]),
         ("0.02%, 0.87%, and 5.56%, corresponding to 9, 465, and 2,972 records.", ["FIGURE_6", "TABLE_4"]),
     ]
     updated = body_md
