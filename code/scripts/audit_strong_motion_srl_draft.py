@@ -18,6 +18,9 @@ DEFAULT_PRODUCT_IMPACT = "outputs/strong_motion_qc_product_impact_knet22119_hp1_
 DEFAULT_SENSITIVITY = "outputs/strong_motion_qc_selector_sensitivity_knet22119_hp1_inst3000/sensitivity_summary.csv"
 DEFAULT_KEY_METRICS = "outputs/strong_motion_qc_product_window_selector_knet22119_hp1_inst3000/summary.csv"
 DEFAULT_RESPONSE_SPECTRUM = "outputs/strong_motion_qc_response_spectrum_knet22119_hp1_inst3000/summary.csv"
+DEFAULT_PNW_SELECTOR = "outputs/strong_motion_qc_product_window_selector_pnw_external/summary.csv"
+DEFAULT_PNW_RESPONSE_SPECTRUM = "outputs/strong_motion_qc_response_spectrum_pnw_external/summary.csv"
+DEFAULT_PRODUCTION_ROUTES = "outputs/strong_motion_qc_product_production_case/production_route_summary.csv"
 DEFAULT_OUTDIR = "outputs/strong_motion_qc_srl_draft_audit"
 
 STYLE_PATTERNS = [
@@ -60,6 +63,9 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--sensitivity", default=DEFAULT_SENSITIVITY)
     parser.add_argument("--key-metrics", default=DEFAULT_KEY_METRICS)
     parser.add_argument("--response-spectrum", default=DEFAULT_RESPONSE_SPECTRUM)
+    parser.add_argument("--pnw-selector-summary", default=DEFAULT_PNW_SELECTOR)
+    parser.add_argument("--pnw-response-spectrum", default=DEFAULT_PNW_RESPONSE_SPECTRUM)
+    parser.add_argument("--production-routes", default=DEFAULT_PRODUCTION_ROUTES)
     parser.add_argument("--outdir", default=DEFAULT_OUTDIR)
     return parser.parse_args()
 
@@ -105,6 +111,9 @@ def build_number_audit(
     impact: pd.DataFrame,
     sensitivity: pd.DataFrame,
     response_spectrum: pd.DataFrame,
+    pnw_selector: pd.DataFrame | None = None,
+    pnw_response_spectrum: pd.DataFrame | None = None,
+    production_routes: pd.DataFrame | None = None,
 ) -> pd.DataFrame:
     rows: list[dict[str, object]] = []
     total_records = int(dataset["records"].sum())
@@ -201,7 +210,61 @@ def build_number_audit(
             else:
                 add_metric(rows, f"{ds}_m3m4_{method}_unstable", fmt_pct(strata["unstable_pct"]), text, DEFAULT_SELECTOR_SUMMARY)
 
+    if pnw_selector is not None:
+        pnw_feature = row_by(pnw_selector, dataset="PNWAccelerometers", priority_group="ALL", policy="feature_onset_fixed")
+        pnw_energy = row_by(pnw_selector, dataset="PNWAccelerometers", priority_group="ALL", policy="energy_onset_fixed")
+        pnw_catalog = row_by(pnw_selector, dataset="PNWAccelerometers", priority_group="ALL", policy="catalog_p_fixed")
+        pnw_selected = row_by(pnw_selector, dataset="PNWAccelerometers", priority_group="ALL", policy="shortest_stable_no_catalog")
+        add_metric(rows, "PNW_records", fmt_int(pnw_feature["records"]), text, DEFAULT_PNW_SELECTOR)
+        add_metric(rows, "PNW_feature_fixed_unstable", fmt_pct(pnw_feature["unstable_pct"]), text, DEFAULT_PNW_SELECTOR)
+        add_metric(rows, "PNW_energy_fixed_unstable", fmt_pct(pnw_energy["unstable_pct"]), text, DEFAULT_PNW_SELECTOR)
+        add_metric(rows, "PNW_catalog_fixed_unstable", fmt_pct(pnw_catalog["unstable_pct"]), text, DEFAULT_PNW_SELECTOR)
+        add_metric(rows, "PNW_selector_fallback", fmt_pct(pnw_selected["full_record_fallback_pct"]), text, DEFAULT_PNW_SELECTOR)
+        add_metric(rows, "PNW_selector_duration", fmt_sec(pnw_selected["median_window_duration_sec"]), text, DEFAULT_PNW_SELECTOR)
+
+    if pnw_response_spectrum is not None:
+        for method in ["feature_onset_fixed", "shortest_stable_no_catalog"]:
+            for period in [0.2, 1.0, 3.0]:
+                row = row_by(
+                    pnw_response_spectrum,
+                    dataset="PNWAccelerometers",
+                    priority_group="ALL",
+                    policy=method,
+                    period_sec=period,
+                )
+                add_metric(
+                    rows,
+                    f"PNW_{method}_{period:g}s_spectrum_unstable",
+                    fmt_pct(row["spectrum_unstable_pct"]),
+                    text,
+                    DEFAULT_PNW_RESPONSE_SPECTRUM,
+                )
+
+    if production_routes is not None:
+        route_all = row_by(production_routes, dataset="ALL", production_route="ALL")
+        route_accept = row_by(production_routes, dataset="ALL", production_route="stable_window_accept")
+        route_full = row_by(production_routes, dataset="ALL", production_route="full_record_required")
+        route_review = row_by(production_routes, dataset="ALL", production_route="long_period_psa_review")
+        pnw_full = row_by(production_routes, dataset="PNWAccelerometers", production_route="full_record_required")
+        pnw_review = row_by(production_routes, dataset="PNWAccelerometers", production_route="long_period_psa_review")
+        add_metric(rows, "production_total_records", fmt_int(route_all["records"]), text, DEFAULT_PRODUCTION_ROUTES)
+        add_metric(rows, "production_accept_records", fmt_int(route_accept["records"]), text, DEFAULT_PRODUCTION_ROUTES)
+        add_metric(rows, "production_accept_pct", fmt_pct(route_accept["pct"]), text, DEFAULT_PRODUCTION_ROUTES)
+        add_metric(rows, "production_full_records", fmt_int(route_full["records"]), text, DEFAULT_PRODUCTION_ROUTES)
+        add_metric(rows, "production_full_pct", fmt_pct(route_full["pct"]), text, DEFAULT_PRODUCTION_ROUTES)
+        add_metric(rows, "production_review_records", fmt_int(route_review["records"]), text, DEFAULT_PRODUCTION_ROUTES)
+        add_metric(rows, "production_review_pct", fmt_pct(route_review["pct"]), text, DEFAULT_PRODUCTION_ROUTES)
+        add_metric(rows, "production_pnw_full_records", fmt_int(pnw_full["records"]), text, DEFAULT_PRODUCTION_ROUTES)
+        add_metric(rows, "production_pnw_review_records", fmt_int(pnw_review["records"]), text, DEFAULT_PRODUCTION_ROUTES)
+
     return pd.DataFrame(rows)
+
+
+def text_before_references(text: str) -> str:
+    marker = re.search(r"^## References\b", text, flags=re.IGNORECASE | re.MULTILINE)
+    if marker:
+        return text[: marker.start()]
+    return text
 
 
 def count_pattern(text: str, pattern: str) -> int:
@@ -291,20 +354,38 @@ def run_audit(
     sensitivity: Path,
     key_metrics: Path,
     response_spectrum: Path,
+    pnw_selector_summary: Path,
+    pnw_response_spectrum: Path,
+    production_routes: Path,
     outdir: Path,
 ) -> dict[str, Path]:
     text = draft_path.read_text()
+    claim_text = text_before_references(text)
     dataset = pd.read_csv(dataset_summary)
     selector = pd.read_csv(selector_summary)
     usage = pd.read_csv(selector_usage)
     impact = pd.read_csv(product_impact)
     sens = pd.read_csv(sensitivity)
     spectrum = pd.read_csv(response_spectrum)
-    number_audit = build_number_audit(text, dataset, selector, usage, impact, sens, spectrum)
+    pnw_selector = pd.read_csv(pnw_selector_summary) if pnw_selector_summary.exists() else None
+    pnw_spectrum = pd.read_csv(pnw_response_spectrum) if pnw_response_spectrum.exists() else None
+    production = pd.read_csv(production_routes) if production_routes.exists() else None
+    number_audit = build_number_audit(
+        text,
+        dataset,
+        selector,
+        usage,
+        impact,
+        sens,
+        spectrum,
+        pnw_selector=pnw_selector,
+        pnw_response_spectrum=pnw_spectrum,
+        production_routes=production,
+    )
     pattern_audit = pd.concat(
         [
-            build_pattern_audit(text, STYLE_PATTERNS, "style"),
-            build_pattern_audit(text, SCOPE_PATTERNS, "scope"),
+            build_pattern_audit(claim_text, STYLE_PATTERNS, "style"),
+            build_pattern_audit(claim_text, SCOPE_PATTERNS, "scope"),
             build_pattern_audit(text, UNRESOLVED_PATTERNS, "unresolved"),
         ],
         ignore_index=True,
@@ -335,6 +416,9 @@ def main() -> None:
         sensitivity=Path(args.sensitivity),
         key_metrics=Path(args.key_metrics),
         response_spectrum=Path(args.response_spectrum),
+        pnw_selector_summary=Path(args.pnw_selector_summary),
+        pnw_response_spectrum=Path(args.pnw_response_spectrum),
+        production_routes=Path(args.production_routes),
         outdir=Path(args.outdir),
     )
     for path in outputs.values():

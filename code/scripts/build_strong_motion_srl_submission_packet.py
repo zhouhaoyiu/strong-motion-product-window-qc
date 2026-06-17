@@ -23,6 +23,9 @@ DEFAULT_METADATA_TEMPLATE = "docs/strong_motion_qc_srl_submission_metadata_templ
 DEFAULT_METADATA_DIR = "outputs/strong_motion_qc_srl_submission_metadata"
 DEFAULT_PGV_RETENTION_DIR = "outputs/strong_motion_qc_pgv_retention_knet22119_hp1_inst3000"
 DEFAULT_RECORD_AUDIT_DIR = "outputs/strong_motion_qc_record_audit_packet_knet22119_hp1_inst3000"
+DEFAULT_PNW_SELECTOR_DIR = "outputs/strong_motion_qc_product_window_selector_pnw_external"
+DEFAULT_PNW_RESPONSE_DIR = "outputs/strong_motion_qc_response_spectrum_pnw_external"
+DEFAULT_PRODUCTION_CASE_DIR = "outputs/strong_motion_qc_product_production_case"
 DEFAULT_CHINESE_MARKDOWN = "docs/strong_motion_qc_srl_manuscript_zh.md"
 DEFAULT_CHINESE_MANUSCRIPT_DIR = "manuscripts/strong_motion_qc_srl_zh"
 
@@ -49,6 +52,9 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--metadata-dir", default=DEFAULT_METADATA_DIR)
     parser.add_argument("--pgv-retention-dir", default=DEFAULT_PGV_RETENTION_DIR)
     parser.add_argument("--record-audit-dir", default=DEFAULT_RECORD_AUDIT_DIR)
+    parser.add_argument("--pnw-selector-dir", default=DEFAULT_PNW_SELECTOR_DIR)
+    parser.add_argument("--pnw-response-dir", default=DEFAULT_PNW_RESPONSE_DIR)
+    parser.add_argument("--production-case-dir", default=DEFAULT_PRODUCTION_CASE_DIR)
     parser.add_argument("--chinese-markdown", default=DEFAULT_CHINESE_MARKDOWN)
     parser.add_argument("--chinese-manuscript-dir", default=DEFAULT_CHINESE_MANUSCRIPT_DIR)
     return parser.parse_args()
@@ -88,7 +94,9 @@ The manuscript addresses a practical strong-motion processing problem: fixed pro
 
 The main contribution is an auditable product-window policy for strong-motion product preparation. Only 0.84% of records are assigned to full-record processing under the default criteria, and the selected-window duration differs by archive: 84.94 s for InstanceGM and 24.66 s for K-NET. A 5% damping response-spectrum audit shows that overall 3.0 s PSA-retention failures drop from 32.28% for feature-onset fixed windows to 5.56% for selected windows.
 
-The manuscript is framed as a quality-control method for strong-motion product generation. The scope is offline archive and batch product preparation: processing-window selection is evaluated against full-record products before product tables are exported. The submission does not claim phase-picking performance, real-time warning capability, learned-model superiority, or replacement of human review.
+The revision also adds a third-party PNWAccelerometers external check and a production-style routing case. The PNW check tests whether the same audit exposes archive-specific window cost outside the primary InstanceGM/K-NET denominator. The routing case separates records into direct selected-window acceptance, full-record processing, and long-period PSA review.
+
+The manuscript is framed as a quality-control method for strong-motion product generation. The scope is offline archive and batch product preparation: processing-window selection is evaluated against full-record products before product tables are exported. The submission does not claim phase-picking performance, real-time warning capability, learned-model superiority, measured human-review-time reduction, or replacement of human review.
 
 All figures, tables, audit outputs, reproducibility instructions, the public GitHub release URL, access dates, and release-license text are included in the review packet.
 
@@ -105,9 +113,9 @@ def data_resources_statement(metadata_path: Path) -> str:
     return """
 # Data and Resources Statement Draft
 
-Waveforms from the InstanceGM/INSTANCE data family and K-NET were used in this study. K-NET waveforms were converted with explicit UD -> Z, NS -> N, and EW -> E component mapping, and K-NET waveform features were computed after 1 Hz high-pass preprocessing.
+Waveforms from the InstanceGM/INSTANCE data family and K-NET were used for the primary audit. PNWAccelerometers was used as a third-party external strong-motion audit. K-NET waveforms were converted with explicit UD -> Z, NS -> N, and EW -> E component mapping, and K-NET waveform features were computed after 1 Hz high-pass preprocessing.
 
-The public reproducibility release is archived at https://github.com/zhouhaoyiu/strong-motion-product-window-qc/releases/tag/v0.1.0. The release contains source code, focused tests, manifest and worklist files, waveform-feature summaries, window-stability summaries, selector summaries, product-impact summaries, threshold-sensitivity summaries, response-spectrum audits, record-level audit cases, figure sources, checksums, and command logs. InstanceGM/INSTANCE data were accessed through https://doi.org/10.13127/INSTANCE on 2026-06-16. K-NET/NIED data were accessed through https://doi.org/10.17598/NIED.0004 on 2026-06-16. Raw waveform archives are not redistributed and remain subject to provider terms. Code and focused tests are released under the MIT License; derived summaries, figures, record-audit plots, manuscript-support metadata, and documentation are released under CC BY 4.0.
+The public reproducibility release is archived at https://github.com/zhouhaoyiu/strong-motion-product-window-qc/releases/tag/v0.1.0. The release contains source code, focused tests, manifest and worklist files, waveform-feature summaries, window-stability summaries, selector summaries, product-impact summaries, threshold-sensitivity summaries, response-spectrum audits, PNW external-audit summaries, production-routing outputs, record-level audit cases, figure sources, checksums, and command logs. InstanceGM/INSTANCE data were accessed through https://doi.org/10.13127/INSTANCE on 2026-06-16. K-NET/NIED data were accessed through https://doi.org/10.17598/NIED.0004 on 2026-06-16. PNWAccelerometers was accessed through the SeisBench local cache on 2026-06-18 and follows Ni et al. (2023), https://doi.org/10.26443/seismica.v2i1.368. Raw waveform archives are not redistributed and remain subject to provider terms. Code and focused tests are released under the MIT License; derived summaries, figures, record-audit plots, manuscript-support metadata, and documentation are released under CC BY 4.0.
 
 {ai_disclosure}
 """.format(ai_disclosure=ai_disclosure)
@@ -231,6 +239,36 @@ python scripts/build_strong_motion_srl_readiness_report.py \\
 python scripts/evaluate_strong_motion_pgv_retention.py \\
   --outdir outputs/strong_motion_qc_pgv_retention_knet22119_hp1_inst3000
 
+python scripts/build_strong_motion_qc_full_manifest.py \\
+  --skip-instance --skip-knet --include-pnw \\
+  --outdir outputs/strong_motion_qc_full_manifest_pnw_external
+
+python scripts/build_strong_motion_qc_worklist.py \\
+  --manifest outputs/strong_motion_qc_full_manifest_pnw_external/strong_motion_qc_full_manifest.csv \\
+  --include-all-dataset PNWAccelerometers \\
+  --outdir outputs/strong_motion_qc_worklist_pnw_external
+
+python scripts/compute_strong_motion_qc_features.py \\
+  --worklist outputs/strong_motion_qc_worklist_pnw_external/waveform_qc_worklist.csv \\
+  --outdir outputs/strong_motion_qc_waveform_features_pnw_external
+
+python scripts/evaluate_strong_motion_window_stability.py \\
+  --features outputs/strong_motion_qc_waveform_features_pnw_external/waveform_features.csv \\
+  --outdir outputs/strong_motion_qc_window_stability_pnw_external
+
+python scripts/evaluate_strong_motion_product_window_selector.py \\
+  --window-stability outputs/strong_motion_qc_window_stability_pnw_external/window_stability.csv \\
+  --outdir outputs/strong_motion_qc_product_window_selector_pnw_external
+
+python scripts/evaluate_strong_motion_response_spectrum_retention.py \\
+  --features outputs/strong_motion_qc_waveform_features_pnw_external/waveform_features.csv \\
+  --selected-windows outputs/strong_motion_qc_product_window_selector_pnw_external/selected_windows.csv \\
+  --outdir outputs/strong_motion_qc_response_spectrum_pnw_external \\
+  --policies feature_onset_fixed energy_onset_fixed catalog_p_fixed adaptive_energy_end shortest_stable_no_catalog
+
+python scripts/build_strong_motion_product_production_case.py \\
+  --outdir outputs/strong_motion_qc_product_production_case
+
 python scripts/build_strong_motion_record_audit_packet.py \\
   --outdir outputs/strong_motion_qc_record_audit_packet_knet22119_hp1_inst3000
 ```
@@ -249,6 +287,7 @@ python -m unittest \\
   tests.test_build_strong_motion_record_audit_packet \\
   tests.test_evaluate_strong_motion_pgv_retention \\
   tests.test_evaluate_strong_motion_response_spectrum_retention \\
+  tests.test_build_strong_motion_product_production_case \\
   tests.test_build_strong_motion_qc_full_manifest \\
   tests.test_compute_strong_motion_qc_features \\
   tests.test_build_strong_motion_qc_worklist
@@ -321,6 +360,9 @@ def packet_files(
     metadata_dir: Path,
     pgv_retention_dir: Path,
     record_audit_dir: Path,
+    pnw_selector_dir: Path,
+    pnw_response_dir: Path,
+    production_case_dir: Path,
     chinese_markdown: Path,
     chinese_manuscript_dir: Path,
 ) -> list[PacketFile]:
@@ -366,6 +408,13 @@ def packet_files(
         PacketFile(pgv_retention_dir / "summary.csv", Path("source_data/pgv_retention_summary.csv"), "Relative PGV-retention summary"),
         PacketFile(pgv_retention_dir / "README.md", Path("evidence/pgv_retention_report.md"), "Relative PGV-retention audit report"),
         PacketFile(pgv_retention_dir / "load_errors.csv", Path("evidence/pgv_retention_load_errors.csv"), "Relative PGV-retention load-error boundary"),
+        PacketFile(pnw_selector_dir / "summary.csv", Path("source_data/pnw_product_window_selector_summary.csv"), "PNWAccelerometers external selector summary"),
+        PacketFile(pnw_selector_dir / "candidate_usage.csv", Path("source_data/pnw_selector_candidate_usage.csv"), "PNWAccelerometers external candidate usage"),
+        PacketFile(pnw_response_dir / "summary.csv", Path("source_data/pnw_response_spectrum_summary.csv"), "PNWAccelerometers external response-spectrum summary"),
+        PacketFile(production_case_dir / "README.md", Path("evidence/production_case_report.md"), "Product-production routing case report"),
+        PacketFile(production_case_dir / "production_route_summary.csv", Path("source_data/production_route_summary.csv"), "Product-production route summary"),
+        PacketFile(production_case_dir / "production_routes.csv", Path("source_data/production_routes.csv"), "Product-production record routes"),
+        PacketFile(production_case_dir / "review_queue.csv", Path("source_data/production_review_queue.csv"), "Product-production review queue"),
         PacketFile(record_audit_dir / "README.md", Path("evidence/record_audit_report.md"), "Representative record-level audit report"),
         PacketFile(record_audit_dir / "cases.csv", Path("source_data/record_audit_cases.csv"), "Representative record-level audit cases"),
         PacketFile(record_audit_dir / "case_windows.csv", Path("source_data/record_audit_case_windows.csv"), "Representative record-level window metrics"),
@@ -420,6 +469,8 @@ This packet is for advisor review and pre-submission checking of the StrongMotio
 - Submission metadata worksheet: `statements/metadata_worksheet_zh.md`
 - Potential reviewer-question answers: `evidence/reviewer_risk_answers_zh.md`
 - Supplemental PGV-retention audit: `evidence/pgv_retention_report.md`
+- Third-party PNW external audit summaries: `source_data/pnw_product_window_selector_summary.csv`, `source_data/pnw_response_spectrum_summary.csv`
+- Product-production routing case: `evidence/production_case_report.md`
 - Representative record-level audit: `evidence/record_audit_report.md`
 - SRL format checklist: `evidence/srl_format_checklist.md`
 - Reproducibility release: `reproducibility/strong_motion_qc_srl_reproducibility_release_current.zip`
@@ -474,6 +525,9 @@ def build_packet(
     metadata_dir: Path,
     pgv_retention_dir: Path,
     record_audit_dir: Path,
+    pnw_selector_dir: Path,
+    pnw_response_dir: Path,
+    production_case_dir: Path,
     chinese_markdown: Path,
     chinese_manuscript_dir: Path,
 ) -> dict[str, Path | int]:
@@ -494,6 +548,9 @@ def build_packet(
         metadata_dir,
         pgv_retention_dir,
         record_audit_dir,
+        pnw_selector_dir,
+        pnw_response_dir,
+        production_case_dir,
         chinese_markdown,
         chinese_manuscript_dir,
     ):
@@ -549,6 +606,9 @@ def main() -> None:
         metadata_dir=Path(args.metadata_dir),
         pgv_retention_dir=Path(args.pgv_retention_dir),
         record_audit_dir=Path(args.record_audit_dir),
+        pnw_selector_dir=Path(args.pnw_selector_dir),
+        pnw_response_dir=Path(args.pnw_response_dir),
+        production_case_dir=Path(args.production_case_dir),
         chinese_markdown=Path(args.chinese_markdown),
         chinese_manuscript_dir=Path(args.chinese_manuscript_dir),
     )

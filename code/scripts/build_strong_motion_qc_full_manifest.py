@@ -23,6 +23,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--min-duration-sec", type=float, default=20.0)
     parser.add_argument("--skip-instance", action="store_true")
     parser.add_argument("--skip-knet", action="store_true")
+    parser.add_argument("--include-pnw", action="store_true")
     return parser.parse_args()
 
 
@@ -43,6 +44,10 @@ def numeric_first(df: pd.DataFrame, columns: Iterable[str]) -> pd.Series:
 
 def strip_hdf5_prefix(series: pd.Series) -> pd.Series:
     return series.astype(str).str.replace(r"^/", "", regex=True)
+
+
+def npts_from_trace_name(series: pd.Series) -> pd.Series:
+    return to_numeric(series.astype(str).str.extract(r":(\d+)$", expand=False))
 
 
 def valid_catalog_sample(sample: pd.Series, sampling_rate: pd.Series, n_samples: pd.Series) -> pd.Series:
@@ -181,6 +186,52 @@ def normalize_knet_metadata(
     return add_pool_columns(manifest, min_duration_sec=min_duration_sec)
 
 
+def normalize_pnw_metadata(metadata: pd.DataFrame, min_duration_sec: float = 20.0) -> pd.DataFrame:
+    md = metadata.copy()
+    source_index = pd.Series(md.index, index=md.index)
+    sampling_rate = numeric_first(md, ["trace_sampling_rate_hz"])
+    n_samples = numeric_first(md, ["trace_npts"])
+    if n_samples.isna().all():
+        n_samples = npts_from_trace_name(first_existing(md, ["trace_name"], ""))
+    duration = duration_from_metadata(n_samples, sampling_rate)
+    p_sample = numeric_first(md, ["trace_P_arrival_sample", "trace_p_arrival_sample"])
+    s_sample = numeric_first(md, ["trace_S_arrival_sample", "trace_s_arrival_sample"])
+    has_p = valid_catalog_sample(p_sample, sampling_rate, n_samples)
+    has_s = valid_catalog_sample(s_sample, sampling_rate, n_samples)
+
+    manifest = pd.DataFrame(
+        {
+            "record_uid": [f"PNWAccelerometers:{idx}" for idx in source_index.astype(str)],
+            "dataset": "PNWAccelerometers",
+            "source_row_index": source_index,
+            "source_manifest": "SeisBench PNWAccelerometers metadata",
+            "waveform_access": "seisbench.data.PNWAccelerometers",
+            "event_id": first_existing(md, ["event_id"], ""),
+            "station_network": first_existing(md, ["station_network_code"], ""),
+            "station_code": first_existing(md, ["station_code"], ""),
+            "trace_name": first_existing(md, ["trace_name"], ""),
+            "waveform_key": first_existing(md, ["trace_name"], ""),
+            "split": first_existing(md, ["split"], ""),
+            "component_order": first_existing(md, ["trace_component_order"], ""),
+            "channel_type": first_existing(md, ["station_channel_code"], ""),
+            "units": "accelerometer",
+            "magnitude": numeric_first(md, ["preferred_source_magnitude", "source_local_magnitude", "source_duration_magnitude"]),
+            "depth_km": numeric_first(md, ["source_depth_km"]),
+            "distance_km": numeric_first(md, ["path_ep_distance_km", "source_distance_km"]),
+            "sampling_rate_hz": sampling_rate,
+            "n_samples": n_samples,
+            "duration_sec": duration,
+            "has_catalog_p": has_p,
+            "has_catalog_s": has_s,
+            "catalog_p_sample": p_sample,
+            "catalog_s_sample": s_sample,
+            "catalog_p_sec": (p_sample / sampling_rate).where(has_p),
+            "catalog_s_sec": (s_sample / sampling_rate).where(has_s),
+        }
+    )
+    return add_pool_columns(manifest, min_duration_sec=min_duration_sec)
+
+
 def dataset_summary(manifest: pd.DataFrame) -> pd.DataFrame:
     rows = []
     for dataset, group in manifest.groupby("dataset", dropna=False):
@@ -276,6 +327,7 @@ def build_from_frames(
     outdir: Path,
     min_duration_sec: float = 20.0,
     knet_source_manifest: str = str(DEFAULT_KNET_METADATA),
+    pnw_metadata: pd.DataFrame | None = None,
 ) -> dict[str, Path]:
     frames = []
     if instance_metadata is not None:
@@ -288,6 +340,8 @@ def build_from_frames(
                 source_manifest=knet_source_manifest,
             )
         )
+    if pnw_metadata is not None:
+        frames.append(normalize_pnw_metadata(pnw_metadata, min_duration_sec=min_duration_sec))
     if not frames:
         raise ValueError("At least one metadata frame is required")
 
@@ -319,16 +373,25 @@ def load_instance_metadata() -> pd.DataFrame:
     return data.metadata
 
 
+def load_pnw_metadata() -> pd.DataFrame:
+    import seisbench.data as sbd
+
+    data = sbd.PNWAccelerometers()
+    return data.metadata
+
+
 def main() -> None:
     args = parse_args()
     instance_metadata = None if args.skip_instance else load_instance_metadata()
     knet_metadata = None if args.skip_knet else pd.read_csv(args.knet_metadata)
+    pnw_metadata = load_pnw_metadata() if args.include_pnw else None
     outputs = build_from_frames(
         instance_metadata=instance_metadata,
         knet_metadata=knet_metadata,
         outdir=Path(args.outdir),
         min_duration_sec=args.min_duration_sec,
         knet_source_manifest=args.knet_metadata,
+        pnw_metadata=pnw_metadata,
     )
     for path in outputs.values():
         print(f"Wrote {path.resolve()}")

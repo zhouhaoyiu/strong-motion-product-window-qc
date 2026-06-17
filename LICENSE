@@ -33,6 +33,6 @@ file states a different license.
 
 ## Third-Party Data Boundary
 
-Raw InstanceGM/INSTANCE and K-NET waveform archives are not redistributed in
-this release. Those data remain governed by their original provider terms,
-citation requirements, and access conditions.
+Raw InstanceGM/INSTANCE, K-NET, and PNWAccelerometers waveform archives are not
+redistributed in this release. Those data remain governed by their original
+provider terms, citation requirements, and access conditions.

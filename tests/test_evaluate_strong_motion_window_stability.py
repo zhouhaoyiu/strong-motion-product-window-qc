@@ -84,7 +84,7 @@ class EvaluateStrongMotionWindowStabilityTests(unittest.TestCase):
         original_load = stability.load_instance_waveform
         original_open = stability.load_waveforms_for_rows
         try:
-            stability.load_waveforms_for_rows = lambda _features, _knet_waveforms: (object(), None, None)
+            stability.load_waveforms_for_rows = lambda _features, _knet_waveforms: (object(), None, None, None)
             stability.load_instance_waveform = lambda _instance_data, _row: (waveform, "mock")
             with tempfile.TemporaryDirectory() as tmp:
                 outputs = stability.run_window_stability(

@@ -26,8 +26,10 @@ shortest-stable selector reduces the same rates to 0.02%, 0.87%, and 5.56%
 (9, 465, and 2,972 records). Threshold tests make the operating trade-off
 explicit: the 0.95 energy-retention criterion keeps full-record assignment
 rare, whereas a 0.98 criterion raises the overall assignment rate to 46.84%.
-The results define a reproducible offline
-windowing audit for strong-motion product preparation.
+An external PNWAccelerometers check and a production-style routing case test
+how the same audit transfers to a third archive and to batch product
+preparation. The results define a reproducible offline windowing audit for
+strong-motion product preparation.
 
 ## Plain Language Summary
 
@@ -55,7 +57,7 @@ work (Douglas, 2003; Boore and Bommer, 2005; Boore et al., 2012).
 Operational systems and services already cover many surrounding parts of the
 strong-motion processing problem. PRISM combines batch processing with a review
 interface for strong-motion records (Jones et al., 2017). The USGS gmprocess
-workflow supports automated near-real-time ground-motion processing (Thompson et
+workflow supports rapid automated ground-motion processing (Thompson et
 al., 2025). European RRSM and ESM services provide rapid raw strong-motion
 parameters and reviewed engineering strong-motion products (Cauzzi et al., 2016;
 Luzi et al., 2016). Recent deep-learning work estimates P arrival time and
@@ -135,6 +137,13 @@ baseline choices can alter downstream amplitudes and spectra, so preprocessing
 is kept explicit (Boore, 2001; Douglas and Boore, 2011). Catalog P times
 support comparator windows and diagnostics. The main selector uses
 waveform-derived candidates.
+
+We add PNWAccelerometers as a third-party external check after the primary
+InstanceGM/K-NET audit (Ni et al., 2023; see Data and Resources). The local
+SeisBench cache contains 6,107 three-component accelerometer records with
+catalog P/S samples. Median record duration is 150.01 s and median magnitude is
+1.83. This dataset is reported separately because its event and archive
+mechanism differ from the primary 53,463-record denominator.
 
 ## Methods
 
@@ -309,6 +318,39 @@ likely to expose residual windowing loss. Records failing the 3.0 s PSA
 threshold are listed in the record-level audit material for long-period
 structural-response or soft-site product review.
 
+### External PNWAccelerometers Check
+
+The PNWAccelerometers audit shows how the same criteria behave on a third
+public strong-motion archive. Fixed 42.00 s windows are a poor match for this
+cache: feature-onset, energy-onset, and catalog-P fixed windows fail the
+product-stability audit for 91.99%, 91.88%, and 90.34% of 6,107 records. The
+shortest-stable selector assigns 10.58% of records to full-record processing
+and selects a median duration of 142.93 s. Most accepted non-full records use
+the adaptive energy-end candidate.
+
+The response-spectrum audit gives the same operational message. For
+feature-onset fixed windows, PNW PSA-retention failures are 82.72%, 45.67%, and
+42.31% at 0.2 s, 1.0 s, and 3.0 s. The shortest-stable selector reduces those
+rates to 0.02%, 3.59%, and 9.53%. The PNW result is reported outside the
+primary denominator and exposes an external archive that needs long windows or
+full-record processing for product-stable output.
+
+### Product-Production Routing Case
+
+We combine the primary audit and the PNW external check into a production-style
+routing table. Each record is routed to one of three actions: selected-window
+acceptance, full-record processing, or long-period PSA review. The review route
+is triggered when the selected window passes the PGA, energy, and peak-time
+checks but fails the 3.0 s PSA-retention audit.
+
+Across 59,570 records, 54,919 records (92.19%) route to direct selected-window
+acceptance, 1,097 records (1.84%) route to full-record processing, and 3,554
+records (5.97%) route to long-period PSA review. The dataset split clarifies
+the workload source: PNWAccelerometers contributes 646 of the 1,097 full-record
+routes and 582 of the 3,554 long-period PSA review routes. This table is a
+reproducible product-preparation worklist. It is not a measured human-review
+time study.
+
 ## Discussion
 
 The results show that strong-motion processing windows need product-retention
@@ -351,7 +393,8 @@ selector retains most 0.2-3.0 s PSA values, with the largest residual loss at
 handling for long-period spectral products. The selected windows still give a
 large product-level gain at 0.2 s, 1.0 s, and most 3.0 s records. Future work
 can start from this explicit product-stability baseline and test
-group-conditioned thresholds on an external validation archive.
+group-conditioned thresholds for archives whose external audit resembles the
+PNWAccelerometers long-window case.
 
 ## Conclusions
 
@@ -368,25 +411,37 @@ windows at 3.0 s. The resulting contribution is an auditable offline
 product-window policy with explicit thresholds, full-record assignment accounting,
 cross-dataset sensitivity, and engineering-product retention checks.
 
+An external PNWAccelerometers audit adds 6,107 third-party records as a stress
+check. It shows high fixed-window failure and a median selected-window duration
+of 142.93 s, confirming that external archive mechanism must be audited before
+fixed windows are reused. A production-routing case over 59,570 records
+separates direct selected-window acceptance, full-record processing, and
+long-period PSA review, giving a practical template for batch product
+preparation.
+
 ## Data and Resources
 
-Waveforms from the InstanceGM/INSTANCE data family and K-NET were used in this
-study. K-NET waveforms were converted with explicit UD -> Z, NS -> N, and
-EW -> E component mapping, and K-NET waveform features were computed after
-1 Hz high-pass preprocessing. The reproducibility release contains the source
-code, focused tests, manifest and worklist files, waveform-feature summaries,
+Waveforms from the InstanceGM/INSTANCE data family and K-NET were used for the
+primary audit. PNWAccelerometers was used as a third-party external check.
+K-NET waveforms were converted with explicit UD -> Z, NS -> N, and EW -> E
+component mapping, and K-NET waveform features were computed after 1 Hz
+high-pass preprocessing. The reproducibility release contains the source code,
+focused tests, manifest and worklist files, waveform-feature summaries,
 window-stability summaries, selector summaries, product-impact summaries,
-threshold-sensitivity summaries, response-spectrum audits, record-level audit
-cases, figure sources, checksums, and command log. The public release is
+threshold-sensitivity summaries, response-spectrum audits, PNW external-audit
+summaries, production-routing outputs, record-level audit cases, figure
+sources, checksums, and command log. The public release is
 archived at
 https://github.com/zhouhaoyiu/strong-motion-product-window-qc/releases/tag/v0.1.0.
 InstanceGM/INSTANCE data were accessed through https://doi.org/10.13127/INSTANCE
 on 16 June 2026. K-NET/NIED data were accessed through
-https://doi.org/10.17598/NIED.0004 on 16 June 2026. Raw waveform archives are
-not redistributed and remain subject to provider terms. Code and focused tests
-are released under the MIT License; derived summaries, figures, record-audit
-plots, manuscript-support metadata, and documentation are released under CC BY
-4.0.
+https://doi.org/10.17598/NIED.0004 on 16 June 2026. PNWAccelerometers was
+accessed through the local SeisBench cache on 18 June 2026 and follows Ni et
+al. (2023), https://doi.org/10.26443/seismica.v2i1.368. Raw waveform archives
+are not redistributed and remain subject to provider terms. Code and focused
+tests are released under the MIT License; derived summaries, figures,
+record-audit plots, manuscript-support metadata, and documentation are released
+under CC BY 4.0.
 
 An AI-assisted language editing tool was used only to polish manuscript
 wording. The authors checked the scientific content, numerical outputs, source
@@ -394,10 +449,10 @@ code, figure data, and final manuscript.
 
 ## Acknowledgments
 
-The authors thank the data providers of the InstanceGM/INSTANCE data family and
-the National Research Institute for Earth Science and Disaster Resilience (NIED)
-K-NET program for making waveform data available. This research received no
-external funding.
+The authors thank the data providers of the InstanceGM/INSTANCE data family,
+the National Research Institute for Earth Science and Disaster Resilience
+(NIED) K-NET program, and the PNWAccelerometers/SeisBench data contributors for
+making waveform data available. This research received no external funding.
 
 ## Declaration of Competing Interests
 
@@ -521,6 +576,10 @@ Michelini, A., S. Cianetti, S. Gaviano, C. Giunchi, D. Jozinovic, and V.
 Lauciani (2021). INSTANCE - the Italian seismic dataset for machine learning,
 *Earth Syst. Sci. Data* 13, no. 12, 5509-5544, doi:
 10.5194/essd-13-5509-2021.
+
+Ni, Y., A. Hutko, F. Skene, M. Denolle, S. Malone, P. Bodin, R. Hartog, and A.
+Wright (2023). Curated Pacific Northwest AI-ready Seismic Dataset, *Seismica*
+2, no. 1, doi: 10.26443/seismica.v2i1.368.
 
 Okada, Y., K. Kasahara, S. Hori, K. Obara, S. Sekiguchi, H. Fujiwara, and A.
 Yamamoto (2004). Recent progress of seismic observation networks in Japan:

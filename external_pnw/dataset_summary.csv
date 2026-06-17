@@ -1,0 +1,3 @@
+dataset,records,metadata_waveform_candidates,catalog_p_eval_candidates,catalog_s_eval_candidates,m3_to_m4_eval_candidates,m4plus_eval_candidates,median_magnitude,median_duration_sec
+PNWAccelerometers,6107,6107,6107,6107,468,76,1.83,150.01
+ALL,6107,6107,6107,6107,468,76,1.83,150.01

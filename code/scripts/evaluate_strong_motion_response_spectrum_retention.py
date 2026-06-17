@@ -28,6 +28,7 @@ from scripts.compute_strong_motion_qc_features import (  # noqa: E402
     list_hdf5_keys,
     load_instance_waveform,
     load_knet_waveform,
+    load_pnw_waveform,
     normalize_waveform_orientation,
     standardize_channels,
 )
@@ -99,19 +100,26 @@ def load_waveform_handles(records: pd.DataFrame, knet_waveforms: Path):
         import seisbench.data as sbd
 
         instance_data = sbd.InstanceGM()
+    pnw_data = None
+    if records["dataset"].eq("PNWAccelerometers").any():
+        import seisbench.data as sbd
+
+        pnw_data = sbd.PNWAccelerometers()
     h5 = None
     keys = None
     if records["dataset"].eq("K-NET").any():
         h5 = h5py.File(knet_waveforms, "r")
         keys = set(list_hdf5_keys(h5))
-    return instance_data, h5, keys
+    return instance_data, h5, keys, pnw_data
 
 
-def load_record_waveform(row: pd.Series, instance_data, h5, keys: set[str] | None, knet_highpass_hz: float | None) -> np.ndarray:
+def load_record_waveform(row: pd.Series, instance_data, h5, keys: set[str] | None, knet_highpass_hz: float | None, pnw_data=None) -> np.ndarray:
     dataset = str(row["dataset"])
     sampling_rate = float(row["sampling_rate_hz"])
     if dataset == "InstanceGM":
         waveform, _ = load_instance_waveform(instance_data, row)
+    elif dataset == "PNWAccelerometers":
+        waveform, _ = load_pnw_waveform(pnw_data, row)
     elif dataset == "K-NET":
         if h5 is None or keys is None:
             raise ValueError("K-NET HDF5 handle is unavailable")
@@ -256,7 +264,6 @@ def markdown_table(df: pd.DataFrame) -> str:
 def write_report(outdir: Path, summary: pd.DataFrame, periods: list[float], policies: list[str]) -> None:
     focus = summary[
         summary["priority_group"].eq("ALL")
-        & summary["dataset"].isin(["InstanceGM", "K-NET", "ALL"])
         & summary["policy"].isin(policies)
     ].copy()
     lines = [
@@ -307,7 +314,7 @@ def run_response_spectrum_retention(
 
     rows: list[dict[str, object]] = []
     load_errors: list[dict[str, object]] = []
-    instance_data, h5, keys = load_waveform_handles(records, knet_waveforms)
+    instance_data, h5, keys, pnw_data = load_waveform_handles(records, knet_waveforms)
     try:
         for _, row in tqdm(records.iterrows(), total=len(records), desc="Response spectra"):
             record_uid = str(row["record_uid"])
@@ -315,7 +322,7 @@ def run_response_spectrum_retention(
             if record_windows is None or record_windows.empty:
                 continue
             try:
-                waveform = load_record_waveform(row, instance_data, h5, keys, knet_highpass_hz)
+                waveform = load_record_waveform(row, instance_data, h5, keys, knet_highpass_hz, pnw_data=pnw_data)
                 rows.extend(
                     record_spectrum_rows(
                         row,

@@ -1,0 +1,17 @@
+dataset,production_route,records,pct,full_record_required,long_period_psa_review,median_window_duration_sec,median_psa_retention_3s
+ALL,ALL,59570,100.0,1097,3554,42.0,1.0
+ALL,full_record_required,1097,1.8415309719657547,1097,0,150.01,1.0
+ALL,long_period_psa_review,3554,5.966090313916401,0,3554,40.730000000000004,0.8566691411654597
+ALL,stable_window_accept,54919,92.19237871411785,0,0,42.0,1.0
+InstanceGM,ALL,31344,100.0,412,2012,84.945,0.9999999654330306
+InstanceGM,full_record_required,412,1.3144461459928536,412,0,120.0,1.0
+InstanceGM,long_period_psa_review,2012,6.419091373149566,0,2012,42.004999999999995,0.8471323302076729
+InstanceGM,stable_window_accept,28920,92.26646248085758,0,0,86.035,1.0
+K-NET,ALL,22119,100.0,39,960,24.66,0.999965081071732
+K-NET,full_record_required,39,0.17631900176319001,39,0,119.0,1.0
+K-NET,long_period_psa_review,960,4.3401600434016006,0,960,25.05,0.8663178398198841
+K-NET,stable_window_accept,21120,95.48352095483521,0,0,24.62,1.0
+PNWAccelerometers,ALL,6107,100.0,646,582,142.93,1.0
+PNWAccelerometers,full_record_required,646,10.57802521696414,646,0,150.01,1.0
+PNWAccelerometers,long_period_psa_review,582,9.530047486490911,0,582,54.739999999999995,0.8728934303744557
+PNWAccelerometers,stable_window_accept,4879,79.89192729654495,0,0,142.59,1.0

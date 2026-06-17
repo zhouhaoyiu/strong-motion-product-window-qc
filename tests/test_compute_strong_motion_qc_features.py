@@ -49,6 +49,13 @@ class FakeInstanceData:
         return [waveform]
 
 
+class FakePNWData:
+    def get_waveforms(self, indexes):
+        waveform = np.zeros((3, 1000), dtype=np.float32)
+        waveform[:, 300:500] = 1.0
+        return [waveform]
+
+
 class ComputeStrongMotionQCFeaturesTests(unittest.TestCase):
     def test_compute_row_loads_instance_waveform(self) -> None:
         result = qc_features.compute_row(base_row("InstanceGM", "InstanceGM:0"), instance_data=FakeInstanceData())
@@ -57,6 +64,16 @@ class ComputeStrongMotionQCFeaturesTests(unittest.TestCase):
         self.assertEqual(result["resolved_waveform_key"], "InstanceGM:0")
         self.assertIn("feature_onset_sec", result)
         self.assertGreaterEqual(result["feature_qc_issue_count"], 0)
+
+    def test_compute_row_loads_pnw_waveform(self) -> None:
+        result = qc_features.compute_row(
+            base_row("PNWAccelerometers", "PNWAccelerometers:0"),
+            pnw_data=FakePNWData(),
+        )
+
+        self.assertEqual(result["waveform_qc_status"], "ok")
+        self.assertEqual(result["resolved_waveform_key"], "PNWAccelerometers:0")
+        self.assertIn("feature_onset_sec", result)
 
     def test_compute_row_loads_knet_hdf5_waveform(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:

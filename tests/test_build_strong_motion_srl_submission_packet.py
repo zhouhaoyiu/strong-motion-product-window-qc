@@ -33,6 +33,9 @@ class BuildStrongMotionSrlSubmissionPacketTests(unittest.TestCase):
             metadata_template = root / "strong_motion_metadata.csv"
             pgv = root / "pgv"
             record_audit = root / "record_audit"
+            pnw_selector = root / "pnw_selector"
+            pnw_response = root / "pnw_response"
+            production_case = root / "production_case"
             chinese_markdown = root / "docs/strong_motion_qc_srl_manuscript_zh.md"
             chinese_manuscript = root / "chinese_manuscript"
             outdir = root / "packet"
@@ -86,6 +89,13 @@ class BuildStrongMotionSrlSubmissionPacketTests(unittest.TestCase):
             touch(record_audit / "plot_manifest.csv", "case_id,path\ncase_01,figures/case_01.pdf\n")
             touch(record_audit / "figures/case_01.pdf", b"%PDF")
             touch(record_audit / "figures/case_01.png", b"PNG")
+            touch(pnw_selector / "summary.csv", "dataset,policy,records\nPNWAccelerometers,shortest_stable_no_catalog,6107\n")
+            touch(pnw_selector / "candidate_usage.csv", "dataset,policy,selected_candidate,records\nPNWAccelerometers,shortest_stable_no_catalog,full_record,1\n")
+            touch(pnw_response / "summary.csv", "dataset,policy,period_sec,records\nPNWAccelerometers,shortest_stable_no_catalog,3.0,6107\n")
+            touch(production_case / "README.md", "# Production case\n")
+            touch(production_case / "production_route_summary.csv", "dataset,production_route,records\nALL,ALL,1\n")
+            touch(production_case / "production_routes.csv", "record_uid,dataset,production_route\nr1,PNWAccelerometers,stable_window_accept\n")
+            touch(production_case / "review_queue.csv", "record_uid,dataset,production_route\nr2,PNWAccelerometers,long_period_psa_review\n")
             touch(chinese_markdown, "# 中文论文稿\n")
             touch(chinese_manuscript / "main.pdf", b"%PDF")
             touch(chinese_manuscript / "main.tex")
@@ -120,6 +130,9 @@ class BuildStrongMotionSrlSubmissionPacketTests(unittest.TestCase):
                     metadata_dir=metadata,
                     pgv_retention_dir=pgv,
                     record_audit_dir=record_audit,
+                    pnw_selector_dir=pnw_selector,
+                    pnw_response_dir=pnw_response,
+                    production_case_dir=production_case,
                     chinese_markdown=chinese_markdown,
                     chinese_manuscript_dir=chinese_manuscript,
                 )
@@ -147,6 +160,11 @@ class BuildStrongMotionSrlSubmissionPacketTests(unittest.TestCase):
         self.assertIn("packet/evidence/pgv_retention_report.md", names)
         self.assertIn("packet/evidence/pgv_retention_load_errors.csv", names)
         self.assertIn("packet/evidence/record_audit_report.md", names)
+        self.assertIn("packet/source_data/pnw_product_window_selector_summary.csv", names)
+        self.assertIn("packet/source_data/pnw_response_spectrum_summary.csv", names)
+        self.assertIn("packet/evidence/production_case_report.md", names)
+        self.assertIn("packet/source_data/production_route_summary.csv", names)
+        self.assertIn("packet/source_data/production_review_queue.csv", names)
         self.assertIn("packet/source_data/record_audit_cases.csv", names)
         self.assertIn("packet/figures/record_audit/case_01.pdf", names)
         self.assertIn("packet/figures/record_audit/case_01.png", names)

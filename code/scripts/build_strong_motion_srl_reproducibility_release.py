@@ -30,6 +30,7 @@ CODE_FILES = [
     "scripts/evaluate_strong_motion_selector_sensitivity.py",
     "scripts/evaluate_strong_motion_response_spectrum_retention.py",
     "scripts/evaluate_strong_motion_pgv_retention.py",
+    "scripts/build_strong_motion_product_production_case.py",
     "scripts/build_strong_motion_record_audit_packet.py",
     "scripts/build_strong_motion_qc_dataset_table.py",
     "scripts/make_strong_motion_qc_figures.py",
@@ -55,6 +56,7 @@ TEST_FILES = [
     "tests/test_evaluate_strong_motion_selector_sensitivity.py",
     "tests/test_evaluate_strong_motion_response_spectrum_retention.py",
     "tests/test_evaluate_strong_motion_pgv_retention.py",
+    "tests/test_build_strong_motion_product_production_case.py",
     "tests/test_build_strong_motion_record_audit_packet.py",
     "tests/test_build_strong_motion_qc_dataset_table.py",
     "tests/test_make_strong_motion_qc_figures.py",
@@ -76,6 +78,16 @@ SUMMARY_FILES = [
     ("outputs/strong_motion_qc_pgv_retention_knet22119_hp1_inst3000/summary.csv", "derived_summaries/pgv_retention_summary.csv"),
     ("outputs/strong_motion_qc_pgv_retention_knet22119_hp1_inst3000/README.md", "derived_summaries/pgv_retention_README.md"),
     ("outputs/strong_motion_qc_pgv_retention_knet22119_hp1_inst3000/load_errors.csv", "derived_summaries/pgv_retention_load_errors.csv"),
+    ("outputs/strong_motion_qc_full_manifest_pnw_external/dataset_summary.csv", "external_pnw/dataset_summary.csv"),
+    ("outputs/strong_motion_qc_worklist_pnw_external/priority_summary.csv", "external_pnw/priority_summary.csv"),
+    ("outputs/strong_motion_qc_waveform_features_pnw_external/summary.csv", "external_pnw/waveform_feature_summary.csv"),
+    ("outputs/strong_motion_qc_product_window_selector_pnw_external/summary.csv", "external_pnw/product_window_selector_summary.csv"),
+    ("outputs/strong_motion_qc_product_window_selector_pnw_external/candidate_usage.csv", "external_pnw/selector_candidate_usage.csv"),
+    ("outputs/strong_motion_qc_response_spectrum_pnw_external/summary.csv", "external_pnw/response_spectrum_summary.csv"),
+    ("outputs/strong_motion_qc_product_production_case/README.md", "production_case/README.md"),
+    ("outputs/strong_motion_qc_product_production_case/production_route_summary.csv", "production_case/production_route_summary.csv"),
+    ("outputs/strong_motion_qc_product_production_case/production_routes.csv", "production_case/production_routes.csv"),
+    ("outputs/strong_motion_qc_product_production_case/review_queue.csv", "production_case/review_queue.csv"),
     ("outputs/strong_motion_qc_record_audit_packet_knet22119_hp1_inst3000/README.md", "record_audit/README.md"),
     ("outputs/strong_motion_qc_record_audit_packet_knet22119_hp1_inst3000/cases.csv", "record_audit/cases.csv"),
     ("outputs/strong_motion_qc_record_audit_packet_knet22119_hp1_inst3000/case_windows.csv", "record_audit/case_windows.csv"),
@@ -190,9 +202,9 @@ file states a different license.
 
 ## Third-Party Data Boundary
 
-Raw InstanceGM/INSTANCE and K-NET waveform archives are not redistributed in
-this release. Those data remain governed by their original provider terms,
-citation requirements, and access conditions.
+Raw InstanceGM/INSTANCE, K-NET, and PNWAccelerometers waveform archives are not
+redistributed in this release. Those data remain governed by their original
+provider terms, citation requirements, and access conditions.
 """
 
 
@@ -218,7 +230,9 @@ This archive supports the manuscript "Auditable Product-Stable Window Selection
 for Strong-Motion Records". It contains code, focused tests, compact derived
 summary tables, manuscript figures, record-level audit cases, the manuscript
 PDF/source files, checksums, and data-source boundary notes. Raw waveform
-archives are excluded and should be obtained from their public providers.
+archives are excluded and should be obtained from their public providers. The
+PNWAccelerometers outputs are included as an external third-party stress check,
+not as part of the primary 53,463-record denominator.
 
 ## Keywords
 
@@ -236,7 +250,8 @@ to provider terms.
 
 - InstanceGM/INSTANCE accessed: 2026-06-16
 - K-NET/NIED accessed: 2026-06-16
-- Final public archive created/accessed: 2026-06-16
+- PNWAccelerometers accessed through SeisBench local cache: 2026-06-18
+- Final public archive created/accessed: 2026-06-18
 
 ## Related Identifiers
 
@@ -244,6 +259,7 @@ to provider terms.
 - INSTANCE article: https://doi.org/10.5194/essd-13-5509-2021
 - INSTANCE dataset: https://doi.org/10.13127/INSTANCE
 - NIED K-NET, KiK-net: https://doi.org/10.17598/NIED.0004
+- PNW AI-ready seismic dataset: https://doi.org/10.26443/seismica.v2i1.368
 - Public GitHub release: https://github.com/zhouhaoyiu/strong-motion-product-window-qc/releases/tag/v0.1.0
 
 ## Files To Include
@@ -271,6 +287,8 @@ This lightweight release supports the manuscript "Auditable Product-Stable Windo
 - `figures/`: manuscript figure PDFs.
 - `manuscript/`: Markdown, LaTeX, and PDF manuscript files.
 - `record_audit/`: representative record-level case metrics and waveform-window plots.
+- `external_pnw/`: third-party PNWAccelerometers external audit summaries.
+- `production_case/`: production-style routing tables for direct selected-window acceptance, full-record processing, and long-period PSA review.
 - `metadata/file_checksums.csv`: SHA-256 checksums for copied release files.
 - `metadata/data_source_manifest.csv`: data-source and upload-boundary notes.
 - `LICENSE`: license boundary for code, derived summaries, and third-party data.
@@ -278,7 +296,7 @@ This lightweight release supports the manuscript "Auditable Product-Stable Windo
 
 ## Data Boundary
 
-Raw waveform archives are excluded from this release. InstanceGM/INSTANCE and K-NET records should be obtained from their public data providers under the providers' access terms. Large intermediate record-level CSV/HDF5 artifacts are regenerated from those public sources and local conversion steps.
+Raw waveform archives are excluded from this release. InstanceGM/INSTANCE, K-NET, and PNWAccelerometers records should be obtained from their public data providers under the providers' access terms. Large intermediate record-level CSV/HDF5 artifacts are regenerated from those public sources and local conversion steps.
 
 ## License Boundary
 
@@ -292,7 +310,7 @@ and remain under their provider terms.
 Create a Python environment with `requirements.txt`, or use an equivalent local
 environment that provides the listed packages.
 
-The manuscript-level numbers and figures can be regenerated from the compact summary CSVs included here. Full waveform-level reruns require the public waveform archives and the K-NET converted HDF5 path used by the local workflow.
+The manuscript-level numbers and figures can be regenerated from the compact summary CSVs included here. Full waveform-level reruns require the public waveform archives, the K-NET converted HDF5 path used by the local workflow, and the SeisBench PNWAccelerometers cache for the external audit.
 """
 
 
@@ -311,6 +329,12 @@ def data_source_rows() -> list[dict[str, str]]:
             "notes": "Use NIED K-NET access; local workflow uses explicit UD->Z, NS->N, EW->E mapping and 1 Hz high-pass feature preprocessing.",
         },
         {
+            "dataset_or_artifact": "PNWAccelerometers",
+            "status": "public_source_required_external_check",
+            "included_in_release": "summary and production-route outputs only",
+            "notes": "Use SeisBench PNWAccelerometers / Ni et al. (2023); raw waveform cache is excluded. This is an external stress check, not part of the primary 53,463-record denominator.",
+        },
+        {
             "dataset_or_artifact": "Manuscript summary CSVs",
             "status": "included",
             "included_in_release": "yes",
@@ -321,6 +345,12 @@ def data_source_rows() -> list[dict[str, str]]:
             "status": "large_intermediate",
             "included_in_release": "summary only",
             "notes": "The full record-level CSV is large; included summary reproduces manuscript claims.",
+        },
+        {
+            "dataset_or_artifact": "Production-style routing case",
+            "status": "included",
+            "included_in_release": "summary, route table, and review queue",
+            "notes": "Routes records to direct selected-window acceptance, full-record processing, or 3.0 s PSA review. It is a reproducible workflow case, not a measured human-time study.",
         },
         {
             "dataset_or_artifact": "Relative PGV-retention audit",
@@ -382,6 +412,36 @@ python scripts/build_submission_metadata_worksheet.py \\
 python scripts/evaluate_strong_motion_pgv_retention.py \\
   --outdir outputs/strong_motion_qc_pgv_retention_knet22119_hp1_inst3000
 
+python scripts/build_strong_motion_qc_full_manifest.py \\
+  --skip-instance --skip-knet --include-pnw \\
+  --outdir outputs/strong_motion_qc_full_manifest_pnw_external
+
+python scripts/build_strong_motion_qc_worklist.py \\
+  --manifest outputs/strong_motion_qc_full_manifest_pnw_external/strong_motion_qc_full_manifest.csv \\
+  --include-all-dataset PNWAccelerometers \\
+  --outdir outputs/strong_motion_qc_worklist_pnw_external
+
+python scripts/compute_strong_motion_qc_features.py \\
+  --worklist outputs/strong_motion_qc_worklist_pnw_external/waveform_qc_worklist.csv \\
+  --outdir outputs/strong_motion_qc_waveform_features_pnw_external
+
+python scripts/evaluate_strong_motion_window_stability.py \\
+  --features outputs/strong_motion_qc_waveform_features_pnw_external/waveform_features.csv \\
+  --outdir outputs/strong_motion_qc_window_stability_pnw_external
+
+python scripts/evaluate_strong_motion_product_window_selector.py \\
+  --window-stability outputs/strong_motion_qc_window_stability_pnw_external/window_stability.csv \\
+  --outdir outputs/strong_motion_qc_product_window_selector_pnw_external
+
+python scripts/evaluate_strong_motion_response_spectrum_retention.py \\
+  --features outputs/strong_motion_qc_waveform_features_pnw_external/waveform_features.csv \\
+  --selected-windows outputs/strong_motion_qc_product_window_selector_pnw_external/selected_windows.csv \\
+  --outdir outputs/strong_motion_qc_response_spectrum_pnw_external \\
+  --policies feature_onset_fixed energy_onset_fixed catalog_p_fixed adaptive_energy_end shortest_stable_no_catalog
+
+python scripts/build_strong_motion_product_production_case.py \\
+  --outdir outputs/strong_motion_qc_product_production_case
+
 python scripts/build_strong_motion_record_audit_packet.py \\
   --outdir outputs/strong_motion_qc_record_audit_packet_knet22119_hp1_inst3000
 ```
@@ -399,6 +459,7 @@ python -m unittest \\
   tests.test_build_strong_motion_record_audit_packet \\
   tests.test_evaluate_strong_motion_pgv_retention \\
   tests.test_evaluate_strong_motion_response_spectrum_retention \\
+  tests.test_build_strong_motion_product_production_case \\
   tests.test_build_strong_motion_qc_full_manifest \\
   tests.test_compute_strong_motion_qc_features \\
   tests.test_build_strong_motion_qc_worklist

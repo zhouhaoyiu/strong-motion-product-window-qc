@@ -148,6 +148,12 @@ def load_instance_waveform(instance_data, row: pd.Series) -> tuple[np.ndarray, s
     return normalize_waveform_orientation(waveforms), f"InstanceGM:{index}"
 
 
+def load_pnw_waveform(pnw_data, row: pd.Series) -> tuple[np.ndarray, str]:
+    index = int(row["source_row_index"])
+    waveforms = pnw_data.get_waveforms([index])[0]
+    return normalize_waveform_orientation(waveforms), f"PNWAccelerometers:{index}"
+
+
 def load_knet_waveform(h5file: h5py.File, all_keys: set[str], row: pd.Series) -> tuple[np.ndarray, str]:
     key = str(row.get("waveform_key", "") or row.get("trace_name", "") or "")
     normalized = key.lstrip("/")
@@ -188,6 +194,7 @@ def feature_fields(features: dict[str, object]) -> dict[str, object]:
 def compute_row(
     row: pd.Series,
     instance_data=None,
+    pnw_data=None,
     knet_h5=None,
     knet_keys: set[str] | None = None,
     knet_highpass_hz: float | None = None,
@@ -198,6 +205,8 @@ def compute_row(
         sampling_rate = float(row["sampling_rate_hz"])
         if dataset == "InstanceGM":
             waveform, resolved_key = load_instance_waveform(instance_data, row)
+        elif dataset == "PNWAccelerometers":
+            waveform, resolved_key = load_pnw_waveform(pnw_data, row)
         elif dataset == "K-NET":
             if knet_h5 is None or knet_keys is None:
                 raise ValueError("K-NET HDF5 handle is not available")
@@ -343,6 +352,11 @@ def compute_features(
         import seisbench.data as sbd
 
         instance_data = sbd.InstanceGM()
+    pnw_data = None
+    if (pending["dataset"] == "PNWAccelerometers").any():
+        import seisbench.data as sbd
+
+        pnw_data = sbd.PNWAccelerometers()
 
     h5 = None
     knet_keys = None
@@ -355,6 +369,7 @@ def compute_features(
                 compute_row(
                     row,
                     instance_data=instance_data,
+                    pnw_data=pnw_data,
                     knet_h5=h5,
                     knet_keys=knet_keys,
                     knet_highpass_hz=knet_highpass_hz,

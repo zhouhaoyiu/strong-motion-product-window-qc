@@ -1,0 +1,4 @@
+dataset,priority_group,records
+PNWAccelerometers,low_magnitude_background,5563
+PNWAccelerometers,m3_to_m4_small_event,468
+PNWAccelerometers,m4plus_strong_motion,76

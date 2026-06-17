@@ -210,7 +210,7 @@ def markdown_table(df: pd.DataFrame) -> str:
 
 def write_report(outdir: Path, summary: pd.DataFrame, usage: pd.DataFrame) -> None:
     display = summary[summary["priority_group"].eq("ALL")].sort_values(["dataset", "policy"]).copy()
-    usage_display = usage[usage["dataset"].isin(["InstanceGM", "K-NET"])].copy()
+    usage_display = usage.copy()
     lines = [
         "# StrongMotion-QC Product Window Selector",
         "",

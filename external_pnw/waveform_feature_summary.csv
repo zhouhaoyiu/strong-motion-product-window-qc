@@ -1,0 +1,5 @@
+dataset,priority_group,records,loaded_records,load_success_pct,median_onset_sec,median_significant_duration_sec,median_spike_score,qc_issue_records
+PNWAccelerometers,low_magnitude_background,5563,5563,100.0,2.17,136.79000000000002,26.83965104472435,1007
+PNWAccelerometers,m3_to_m4_small_event,468,468,100.0,17.35,71.215,91.74102257239363,249
+PNWAccelerometers,m4plus_strong_motion,76,76,100.0,59.985,36.965,71.1275161703181,32
+ALL,ALL,6107,6107,100.0,2.37,135.68,29.39051552139928,1288

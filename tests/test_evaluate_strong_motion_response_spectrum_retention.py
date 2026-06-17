@@ -77,8 +77,8 @@ class ResponseSpectrumRetentionTests(unittest.TestCase):
         original_handles = spectrum.load_waveform_handles
         original_loader = spectrum.load_record_waveform
         try:
-            spectrum.load_waveform_handles = lambda _records, _knet_waveforms: (object(), None, None)
-            spectrum.load_record_waveform = lambda _row, _instance_data, _h5, _keys, _hp: waveform
+            spectrum.load_waveform_handles = lambda _records, _knet_waveforms: (object(), None, None, None)
+            spectrum.load_record_waveform = lambda _row, _instance_data, _h5, _keys, _hp, pnw_data=None: waveform
             with tempfile.TemporaryDirectory() as tmp:
                 outputs = spectrum.run_response_spectrum_retention(
                     features=features,

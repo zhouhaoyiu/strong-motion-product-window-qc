@@ -28,6 +28,7 @@ from scripts.compute_strong_motion_qc_features import (  # noqa: E402
     list_hdf5_keys,
     load_instance_waveform,
     load_knet_waveform,
+    load_pnw_waveform,
     normalize_waveform_orientation,
     standardize_channels,
 )
@@ -180,12 +181,17 @@ def load_waveforms_for_rows(features: pd.DataFrame, knet_waveforms: Path):
         import seisbench.data as sbd
 
         instance_data = sbd.InstanceGM()
+    pnw_data = None
+    if features["dataset"].eq("PNWAccelerometers").any():
+        import seisbench.data as sbd
+
+        pnw_data = sbd.PNWAccelerometers()
     h5 = None
     keys = None
     if features["dataset"].eq("K-NET").any():
         h5 = h5py.File(knet_waveforms, "r")
         keys = set(list_hdf5_keys(h5))
-    return instance_data, h5, keys
+    return instance_data, h5, keys, pnw_data
 
 
 def evaluate_record(
@@ -336,12 +342,14 @@ def run_window_stability(
     elif max_records is not None:
         work = work.head(max_records).copy()
     rows = []
-    instance_data, h5, keys = load_waveforms_for_rows(work, knet_waveforms)
+    instance_data, h5, keys, pnw_data = load_waveforms_for_rows(work, knet_waveforms)
     try:
         for _, row in tqdm(work.iterrows(), total=len(work), desc="Evaluate windows"):
             try:
                 if row["dataset"] == "InstanceGM":
                     waveform, _ = load_instance_waveform(instance_data, row)
+                elif row["dataset"] == "PNWAccelerometers":
+                    waveform, _ = load_pnw_waveform(pnw_data, row)
                 elif row["dataset"] == "K-NET":
                     if h5 is None or keys is None:
                         raise ValueError("K-NET HDF5 handle is unavailable")

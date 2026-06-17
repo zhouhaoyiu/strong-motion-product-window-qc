@@ -1,8 +1,10 @@
 dataset_or_artifact,status,included_in_release,notes
 InstanceGM / INSTANCE,public_source_required,no raw waveforms,Use public provider access; release includes derived manuscript summaries only.
 K-NET,public_source_required,no raw waveforms,"Use NIED K-NET access; local workflow uses explicit UD->Z, NS->N, EW->E mapping and 1 Hz high-pass feature preprocessing."
+PNWAccelerometers,public_source_required_external_check,summary and production-route outputs only,"Use SeisBench PNWAccelerometers / Ni et al. (2023); raw waveform cache is excluded. This is an external stress check, not part of the primary 53,463-record denominator."
 Manuscript summary CSVs,included,yes,"Compact tables used to reproduce manuscript numbers, figures, and audits."
 Record-level response-spectrum retention CSV,large_intermediate,summary only,The full record-level CSV is large; included summary reproduces manuscript claims.
+Production-style routing case,included,"summary, route table, and review queue","Routes records to direct selected-window acceptance, full-record processing, or 3.0 s PSA review. It is a reproducible workflow case, not a measured human-time study."
 Relative PGV-retention audit,supplemental_summary_included,summary and load-error boundary,"This is a relative peak-vector-velocity retention proxy, not an absolute PGV product release."
 Representative record-level audit packet,included,case tables and generated plots,Representative cases support reviewability while preserving the statistical denominator.
 Converted K-NET HDF5,large_local_intermediate,no,Regenerate from K-NET source files with documented component mapping before full reruns.

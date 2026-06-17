@@ -35,6 +35,36 @@ python scripts/build_submission_metadata_worksheet.py \
 python scripts/evaluate_strong_motion_pgv_retention.py \
   --outdir outputs/strong_motion_qc_pgv_retention_knet22119_hp1_inst3000
 
+python scripts/build_strong_motion_qc_full_manifest.py \
+  --skip-instance --skip-knet --include-pnw \
+  --outdir outputs/strong_motion_qc_full_manifest_pnw_external
+
+python scripts/build_strong_motion_qc_worklist.py \
+  --manifest outputs/strong_motion_qc_full_manifest_pnw_external/strong_motion_qc_full_manifest.csv \
+  --include-all-dataset PNWAccelerometers \
+  --outdir outputs/strong_motion_qc_worklist_pnw_external
+
+python scripts/compute_strong_motion_qc_features.py \
+  --worklist outputs/strong_motion_qc_worklist_pnw_external/waveform_qc_worklist.csv \
+  --outdir outputs/strong_motion_qc_waveform_features_pnw_external
+
+python scripts/evaluate_strong_motion_window_stability.py \
+  --features outputs/strong_motion_qc_waveform_features_pnw_external/waveform_features.csv \
+  --outdir outputs/strong_motion_qc_window_stability_pnw_external
+
+python scripts/evaluate_strong_motion_product_window_selector.py \
+  --window-stability outputs/strong_motion_qc_window_stability_pnw_external/window_stability.csv \
+  --outdir outputs/strong_motion_qc_product_window_selector_pnw_external
+
+python scripts/evaluate_strong_motion_response_spectrum_retention.py \
+  --features outputs/strong_motion_qc_waveform_features_pnw_external/waveform_features.csv \
+  --selected-windows outputs/strong_motion_qc_product_window_selector_pnw_external/selected_windows.csv \
+  --outdir outputs/strong_motion_qc_response_spectrum_pnw_external \
+  --policies feature_onset_fixed energy_onset_fixed catalog_p_fixed adaptive_energy_end shortest_stable_no_catalog
+
+python scripts/build_strong_motion_product_production_case.py \
+  --outdir outputs/strong_motion_qc_product_production_case
+
 python scripts/build_strong_motion_record_audit_packet.py \
   --outdir outputs/strong_motion_qc_record_audit_packet_knet22119_hp1_inst3000
 ```
@@ -52,6 +82,7 @@ python -m unittest \
   tests.test_build_strong_motion_record_audit_packet \
   tests.test_evaluate_strong_motion_pgv_retention \
   tests.test_evaluate_strong_motion_response_spectrum_retention \
+  tests.test_build_strong_motion_product_production_case \
   tests.test_build_strong_motion_qc_full_manifest \
   tests.test_compute_strong_motion_qc_features \
   tests.test_build_strong_motion_qc_worklist

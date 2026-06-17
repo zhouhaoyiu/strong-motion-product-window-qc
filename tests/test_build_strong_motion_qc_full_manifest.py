@@ -140,6 +140,33 @@ class BuildStrongMotionQCFullManifestTests(unittest.TestCase):
         self.assertAlmostEqual(float(row["catalog_p_sec"]), 5.02)
         self.assertTrue(row["m4plus_eval_candidate"])
 
+    def test_normalizes_pnw_accelerometer_metadata(self) -> None:
+        pnw = pd.DataFrame(
+            [
+                {
+                    "event_id": "uw1",
+                    "station_network_code": "UW",
+                    "station_code": "STA",
+                    "station_channel_code": "EN",
+                    "trace_name": "bucket1$1,:3,:15001",
+                    "trace_sampling_rate_hz": 100.0,
+                    "trace_P_arrival_sample": 5000,
+                    "trace_S_arrival_sample": 5600,
+                    "preferred_source_magnitude": 3.2,
+                    "source_depth_km": 12.0,
+                    "trace_component_order": "ENZ",
+                }
+            ]
+        )
+
+        manifest = builder.normalize_pnw_metadata(pnw)
+        row = manifest.iloc[0]
+
+        self.assertEqual(row["dataset"], "PNWAccelerometers")
+        self.assertEqual(int(row["n_samples"]), 15001)
+        self.assertAlmostEqual(float(row["duration_sec"]), 150.01)
+        self.assertTrue(row["m3_to_m4_eval_candidate"])
+
 
 if __name__ == "__main__":
     unittest.main()
