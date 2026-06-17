@@ -52,6 +52,20 @@ motion in one archive and retain unnecessary waveform in another. These
 dependencies are a central issue in strong-motion processing and record-quality
 work (Douglas, 2003; Boore and Bommer, 2005; Boore et al., 2012).
 
+Operational systems and services already cover many surrounding parts of the
+strong-motion processing problem. PRISM combines batch processing with a review
+interface for strong-motion records (Jones et al., 2017). The USGS gmprocess
+workflow supports automated near-real-time ground-motion processing (Thompson et
+al., 2025). European RRSM and ESM services provide rapid raw strong-motion
+parameters and reviewed engineering strong-motion products (Cauzzi et al., 2016;
+Luzi et al., 2016). Recent deep-learning work estimates P arrival time and
+high-pass corner frequency for strong-motion displacement processing (Inocente
+and Maruyama, 2026), and national product systems calculate PGA, PGV, PGD,
+intensity, duration, Fourier spectra, response spectra, and related outputs
+(Liu et al., 2025). This study isolates the record-level processing-window
+duration used to retain product-relevant motion before those products are
+reported.
+
 Fixed windows are also common in public waveform datasets because they make
 records uniform, easy to index, and reusable across studies. That practical
 value creates a product-quality requirement: the retained interval needs to be
@@ -469,6 +483,10 @@ no. 2, 93-115, doi: 10.1016/j.soildyn.2004.10.007.
 Chopra, A. K. (2017). *Dynamics of Structures: Theory and Applications to
 Earthquake Engineering*, 5th ed., Pearson, Boston, Massachusetts.
 
+Cauzzi, C., R. Sleeman, J. Clinton, J. D. Ballesta, O. Galanis, and P. Kastli
+(2016). Introducing the European Rapid Raw Strong-Motion database, *Seismol.
+Res. Lett.* 87, no. 4, 977-986, doi: 10.1785/0220150271.
+
 Dobry, R., I. M. Idriss, and E. Ng (1978). Duration characteristics of
 horizontal components of strong-motion earthquake records, *Bull. Seismol.
 Soc. Am.* 68, no. 5, 1487-1520, doi: 10.1785/BSSA0680051487.
@@ -479,6 +497,25 @@ Seismol. Soc. Am.* 93, no. 1, 167-184, doi: 10.1785/0120020145.
 Douglas, J., and D. M. Boore (2011). High-frequency filtering of strong-motion
 records, *Bull. Seismol. Soc. Am.* 101, no. 6, 2873-2885, doi:
 10.1785/0120110090.
+
+Inocente, I., and Y. Maruyama (2026). Automated strong-motion record
+processing via deep learning-based simultaneous P-wave identification and
+high-pass corner-frequency selection, *Seism. Rec.* 6, no. 2, 219-229, doi:
+10.1785/0320260007.
+
+Jones, J. M., E. Kalkan, C. D. Stephens, and P. Ng (2017). PRISM Software:
+Processing and Review Interface for Strong-Motion Data, *Seismol. Res. Lett.*
+88, no. 3, 851-866, doi: 10.1785/0220160200.
+
+Liu, Y., L. Zou, Q. Zhang, and X. Li (2025). Strong-Motion Data Processing and
+Product Generation System for Earthquake Early Warning Network, *Appl. Syst.
+Innov.* 8, no. 6, 172, doi: 10.3390/asi8060172.
+
+Luzi, L., R. Puglia, E. Russo, M. D'Amico, C. Felicetta, F. Pacor, G. Lanzano,
+U. Ceken, J. Clinton, G. Costa, L. Duni, E. Farzanegan, P. Gueguen, C.
+Ionescu, I. Kalogeras, et al. (2016). The Engineering Strong-Motion
+Database: A platform to access pan-European accelerometric data, *Seismol.
+Res. Lett.* 87, no. 4, 987-997, doi: 10.1785/0220150278.
 
 Michelini, A., S. Cianetti, S. Gaviano, C. Giunchi, D. Jozinovic, and V.
 Lauciani (2021). INSTANCE - the Italian seismic dataset for machine learning,
@@ -493,3 +530,9 @@ xv-xxviii, doi: 10.1186/BF03353076.
 Trifunac, M. D., and A. G. Brady (1975). A study on the duration of strong
 earthquake ground motion, *Bull. Seismol. Soc. Am.* 65, no. 3, 581-626, doi:
 10.1785/BSSA0650030581.
+
+Thompson, E. M., M. Hearne, B. T. Aagaard, J. M. Rekoske, C. B. Worden, M. P.
+Moschetti, H. E. Hunsinger, G. C. Ferragut, G. A. Parker, J. A. Smith, K. K.
+Smith, and A. R. Kottke (2025). Automated, near real-time ground-motion
+processing at the U.S. Geological Survey, *Seismol. Res. Lett.* 96, no. 1,
+538-553, doi: 10.1785/0220240021.
