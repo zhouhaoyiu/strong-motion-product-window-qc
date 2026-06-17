@@ -88,15 +88,15 @@ def cover_letter(metadata_path: Path) -> str:
 
 Dear Editor,
 
-We submit the manuscript "Auditable Product-Stable Window Selection for Strong-Motion Records" for consideration as a Regular Article in *Seismological Research Letters*.
+We submit the manuscript "Auditable Processing-Window Quality Control for Strong-Motion Products" for consideration as a Regular Article in *Seismological Research Letters*.
 
-The manuscript addresses a practical strong-motion processing problem: fixed processing windows can preserve peak motion, waveform energy, and response-spectrum quantities unevenly across archives. We evaluate this problem on 53,463 three-component records from InstanceGM and K-NET, identify energy truncation as the dominant fixed-window failure mechanism, and test an offline waveform-derived selector that chooses the shortest candidate window passing explicit product-retention checks.
+The manuscript addresses a practical strong-motion product-production problem: fixed processing windows can preserve peak motion, waveform energy, and response-spectrum quantities unevenly across archives. We evaluate this problem on 53,463 three-component records from InstanceGM and K-NET, identify energy truncation as the dominant fixed-window failure mechanism, and define an offline quality-control workflow that selects the shortest candidate window passing explicit product-retention checks.
 
-The main contribution is an auditable product-window policy for strong-motion product preparation. Only 0.84% of records are assigned to full-record processing under the default criteria, and the selected-window duration differs by archive: 84.94 s for InstanceGM and 24.66 s for K-NET. A 5% damping response-spectrum audit shows that overall 3.0 s PSA-retention failures drop from 32.28% for feature-onset fixed windows to 5.56% for selected windows.
+The main contribution is an auditable quality-control policy for strong-motion product windows. Only 0.84% of records are assigned to full-record processing under the default criteria, and the selected-window duration differs by archive: 84.94 s for InstanceGM and 24.66 s for K-NET. A 5% damping response-spectrum audit shows that overall 3.0 s PSA-retention failures drop from 32.28% for feature-onset fixed windows to 5.56% for selected windows.
 
 The revision also adds a third-party PNWAccelerometers external check and a production-style routing case. The PNW check tests whether the same audit exposes archive-specific window cost outside the primary InstanceGM/K-NET denominator. The routing case separates records into direct selected-window acceptance, full-record processing, and long-period PSA review.
 
-The manuscript is framed as a quality-control method for strong-motion product generation. The scope is offline archive and batch product preparation: processing-window selection is evaluated against full-record products before product tables are exported. The submission does not claim phase-picking performance, real-time warning capability, learned-model superiority, measured human-review-time reduction, or replacement of human review.
+The manuscript is framed as a quality-control method for strong-motion product generation. The scope is offline archive and batch product preparation: processing-window selection is evaluated against full-record products before product tables are exported. Phase picking, real-time warning, learned-model comparison, measured human-review-time reduction, and human-review replacement are outside the study scope.
 
 All figures, tables, audit outputs, reproducibility instructions, the public GitHub release URL, access dates, and release-license text are included in the review packet.
 

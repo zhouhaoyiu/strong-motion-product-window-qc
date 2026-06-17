@@ -1,4 +1,4 @@
-# Auditable Product-Stable Window Selection for Strong-Motion Records
+# Auditable Processing-Window Quality Control for Strong-Motion Products
 
 ## Abstract
 
@@ -28,8 +28,8 @@ explicit: the 0.95 energy-retention criterion keeps full-record assignment
 rare, whereas a 0.98 criterion raises the overall assignment rate to 46.84%.
 An external PNWAccelerometers check and a production-style routing case test
 how the same audit transfers to a third archive and to batch product
-preparation. The results define a reproducible offline windowing audit for
-strong-motion product preparation.
+preparation. The results define a reproducible offline quality-control workflow
+for strong-motion product windows.
 
 ## Plain Language Summary
 
@@ -86,7 +86,7 @@ measures are standard engineering products, which makes window retention a
 product-level requirement beyond plotting convenience (Trifunac and Brady,
 1975; Dobry et al., 1978; Chopra, 2017).
 
-This study treats processing-window selection as a product-retention problem.
+This study treats processing-window choice as a product-retention quality-control problem.
 Arrival estimates help locate the beginning of shaking. The processing window
 also retains the quantities used downstream. The target output is an
 offline record-level window with traceable product checks. This framing matches
@@ -102,14 +102,13 @@ strong-motion recordings operated by NIED (Aoi et al., 2004; Okada et al.,
 sampling rate, keeping the comparison focused on waveform scale and window
 policy. Figure 1 summarizes the workflow.
 
-The paper makes four contributions. First, it defines product stability for
-strong-motion processing windows using peak retention, energy retention, and
-peak-time inclusion. Second, it quantifies the dataset dependence of common
-fixed windows across 53,463 waveform records. Third, it evaluates a
-no-catalog, waveform-derived shortest-stable selector with explicit
-full-record accounting. Fourth, it reports product-impact recovery, threshold
-sensitivity, and response-spectrum retention as auditable engineering-product
-checks.
+The paper contributes a quality-control workflow for strong-motion product
+windows. It defines product-stability checks using peak retention, energy
+retention, and peak-time inclusion; quantifies fixed-window dataset dependence
+across 53,463 waveform records; evaluates a no-catalog shortest-stable rule
+with explicit full-record accounting; and reports product-impact recovery,
+threshold sensitivity, response-spectrum retention, an external PNW audit, and
+a production-routing case.
 
 ## Data
 
@@ -369,7 +368,7 @@ energy. This mechanism explains why a single fixed duration transfers poorly
 between archives even when both datasets are sampled at 100 Hz and processed by
 the same product-retention criteria.
 
-The method leaves a clear audit trail. Each selected window can be traced to its
+The quality-control workflow leaves a clear audit trail. Each selected window can be traced to its
 candidate type, product-retention values, peak-inclusion status, and
 full-record assignment state. This record-level traceability matters for strong-motion product
 preparation because processing decisions need to survive later review and
@@ -408,8 +407,9 @@ duration differs sharply by dataset: 84.94 s for InstanceGM and 24.66 s for
 K-NET. The response-spectrum audit shows that overall PSA-retention failures
 drop from 32.28% for feature-onset fixed windows to 5.56% for the selected
 windows at 3.0 s. The resulting contribution is an auditable offline
-product-window policy with explicit thresholds, full-record assignment accounting,
-cross-dataset sensitivity, and engineering-product retention checks.
+product-window quality-control workflow with explicit thresholds, full-record
+assignment accounting, cross-dataset sensitivity, and engineering-product
+retention checks.
 
 An external PNWAccelerometers audit adds 6,107 third-party records as a stress
 check. It shows high fixed-window failure and a median selected-window duration
