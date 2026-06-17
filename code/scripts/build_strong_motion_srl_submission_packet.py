@@ -142,9 +142,10 @@ Completed in the current metadata file:
 - All-author approval.
 - SRL classification keywords, standard publication route, editor background statement, and supplemental-material decision.
 
-These fields still require completion before formal submission:
-
-- Final public code/archive URL and access dates.
+Public archive URL and access dates are recorded in the manuscript Data and
+Resources statement and in the reproducibility release metadata. Before formal
+submission, verify that the GitHub release remains public and that the release
+asset digest matches the local archive.
 
 The fuller StrongMotion-QC-specific worksheet is included as
 `statements/metadata_worksheet_zh.md` and
@@ -474,7 +475,7 @@ This packet is for advisor review and pre-submission checking of the StrongMotio
 - Representative record-level audit: `evidence/record_audit_report.md`
 - SRL format checklist: `evidence/srl_format_checklist.md`
 - Reproducibility release: `reproducibility/strong_motion_qc_srl_reproducibility_release_current.zip`
-- Final manual items: public archive URL and access dates.
+- Final manual item: verify that the public release remains accessible at submission time.
 
 ## Scope
 
@@ -493,10 +494,10 @@ def write_package_report(outdir: Path, total: int, missing: int, zip_path: Path)
 - Missing required files: {missing}
 - Ready for advisor review: {'yes' if missing == 0 else 'no'}
 
-## Remaining Submission Fields
+## Final Manual Check
 
-1. Final public code/data archive URL.
-2. Final data/resource access dates.
+Verify that the public GitHub release remains accessible at submission time and
+that the release asset digest matches the local reproducibility archive.
 """
     write_text(outdir / "package_report.md", report)
 
