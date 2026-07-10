@@ -130,6 +130,16 @@ class ComputeStrongMotionQCFeaturesTests(unittest.TestCase):
         self.assertEqual(result["waveform_preprocess"], "knet_highpass_1hz")
         self.assertIn("feature_energy_onset_sec", result)
 
+    def test_compute_row_can_apply_shared_acceleration_preprocessing(self) -> None:
+        result = qc_features.compute_row(
+            base_row("InstanceGM", "InstanceGM:0"),
+            instance_data=FakeInstanceData(),
+            acceleration_highpass_hz=0.1,
+        )
+
+        self.assertEqual(result["waveform_qc_status"], "ok")
+        self.assertEqual(result["waveform_preprocess"], "linear_detrend_highpass_0.1hz")
+
     def test_compute_row_keeps_errors_visible(self) -> None:
         result = qc_features.compute_row(base_row("Unknown", "bad:0"))
 

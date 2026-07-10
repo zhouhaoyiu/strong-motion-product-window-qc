@@ -1,0 +1,51 @@
+# Revised StrongMotion-QC Evidence Audit
+
+Result: 44 PASS, 0 FAIL.
+
+```csv
+check_id,status,observed,expected
+main_candidate_records,PASS,45652,45652
+main_loaded_records,PASS,44674,44674
+main_load_errors,PASS,978,978
+instance_acceleration_units,PASS,['mps2'],acceleration units only
+main_uniform_preprocessing,PASS,['linear_detrend_highpass_0.1hz'],['linear_detrend_highpass_0.1hz']
+main_primary_selector_records,PASS,44674,44674
+main_peak_definition,PASS,['minimum_component_peak_acceleration_retention'],['minimum_component_peak_acceleration_retention']
+main_response_grain,PASS,402066,402066
+main_response_policies,PASS,"['arias_1_99_padded', 'feature_onset_fixed', 'shortest_stable_no_catalog']","['arias_1_99_padded', 'feature_onset_fixed', 'shortest_stable_no_catalog']"
+main_selected_records,PASS,44674,44674
+main_selected_unique,PASS,44674,44674
+main_stage_values,PASS,"['arias_escalation', 'full_record_fallback', 'primary']","['arias_escalation', 'full_record_fallback', 'primary']"
+main_spectrum_grain,PASS,134022,134022
+main_periods,PASS,"[np.float64(0.2), np.float64(1.0), np.float64(3.0)]","[0.2, 1.0, 3.0]"
+main_psa_threshold,PASS,0,0
+main_psa_definition,PASS,['minimum_component_psa_retention'],['minimum_component_psa_retention']
+main_ringdown_cycles,PASS,[5.0],[5.0]
+pnw_loaded_records,PASS,6107,6107
+pnw_primary_selector_records,PASS,6107,6107
+pnw_peak_definition,PASS,['minimum_component_peak_acceleration_retention'],['minimum_component_peak_acceleration_retention']
+pnw_response_grain,PASS,54963,54963
+pnw_selected_records,PASS,6107,6107
+pnw_selected_unique,PASS,6107,6107
+pnw_stage_values,PASS,"['arias_escalation', 'full_record_fallback', 'primary']","['arias_escalation', 'full_record_fallback', 'primary']"
+pnw_spectrum_grain,PASS,18321,18321
+pnw_periods,PASS,"[np.float64(0.2), np.float64(1.0), np.float64(3.0)]","[0.2, 1.0, 3.0]"
+pnw_psa_threshold,PASS,0,0
+pnw_psa_definition,PASS,['minimum_component_psa_retention'],['minimum_component_psa_retention']
+pnw_ringdown_cycles,PASS,[5.0],[5.0]
+filter_sample_identity,PASS,1521,1521
+filter_comparison_grain,PASS,13689,13689
+filter_ringdown_cycles,PASS,"{'0.05 Hz': [5.0], '0.10 Hz': [5.0]}","{'0.05 Hz': [5.0], '0.10 Hz': [5.0]}"
+pnw_snr_records,PASS,6107,6107
+pnw_snr_bins,PASS,"['<3 dB', '3-10 dB', '>=10 dB']","['<3 dB', '3-10 dB', '>=10 dB']"
+pnw_snr_primary_psa,PASS,"[50.81, 63.34, 66.67]","[50.81, 63.34, 66.67]"
+pnw_snr_final_fallback,PASS,"[0.68, 0.76, 38.65]","[0.68, 0.76, 38.65]"
+english_key_numbers,PASS,[],[]
+chinese_key_numbers,PASS,[],[]
+manuscript_stale_markers,PASS,[],[]
+corrected_reference_metadata,PASS,[],[]
+chinese_no_local_cache_wording,PASS,False,False
+english_ai_disclosure_location,PASS,True,True
+chinese_ai_disclosure_location,PASS,True,True
+chinese_no_double_section_numbering,PASS,[],[]
+```

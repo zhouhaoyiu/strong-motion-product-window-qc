@@ -1,0 +1,16 @@
+dataset,priority_group,policy,period_sec,records,spectrum_unstable_records,spectrum_unstable_pct,median_psa_retention,p05_psa_retention,p01_psa_retention,median_window_duration_sec
+PNWAccelerometers,low_magnitude_background,product_spectral_safeguard,0.2,5563,4,0.07190364911019234,1.0,1.0,0.9999999999999998,150.01
+PNWAccelerometers,low_magnitude_background,product_spectral_safeguard,1.0,5563,73,1.3122415962610103,1.0,0.9999993493128929,0.9379757777635152,150.01
+PNWAccelerometers,low_magnitude_background,product_spectral_safeguard,3.0,5563,159,2.8581700521301454,1.0,0.98165239852687,0.9166432763874361,150.01
+PNWAccelerometers,m3_to_m4_small_event,product_spectral_safeguard,0.2,468,0,0.0,1.0,0.9999999984884181,0.9999996420962638,150.01
+PNWAccelerometers,m3_to_m4_small_event,product_spectral_safeguard,1.0,468,3,0.641025641025641,1.0,0.9996830990148856,0.9897895832943284,150.01
+PNWAccelerometers,m3_to_m4_small_event,product_spectral_safeguard,3.0,468,32,6.837606837606838,1.0,0.9363908654141587,0.9110368095207753,150.01
+PNWAccelerometers,m4plus_strong_motion,product_spectral_safeguard,0.2,76,0,0.0,1.0,0.9999999619170185,0.9999263063037749,85.89
+PNWAccelerometers,m4plus_strong_motion,product_spectral_safeguard,1.0,76,0,0.0,0.9999999994768508,0.9997541084882695,0.9989749235776761,85.89
+PNWAccelerometers,m4plus_strong_motion,product_spectral_safeguard,3.0,76,8,10.526315789473683,0.999925568613377,0.9253201998422471,0.9027152783054339,85.89
+PNWAccelerometers,ALL,product_spectral_safeguard,0.2,6107,4,0.06549860815457671,1.0,1.0,0.9999999978317472,150.01
+PNWAccelerometers,ALL,product_spectral_safeguard,1.0,6107,76,1.2444735549369577,1.0,0.999944070857576,0.9389248974213747,150.01
+PNWAccelerometers,ALL,product_spectral_safeguard,3.0,6107,199,3.2585557556901916,1.0,0.9732537163933581,0.9155945261424892,150.01
+ALL,ALL,product_spectral_safeguard,0.2,6107,4,0.06549860815457671,1.0,1.0,0.9999999978317472,150.01
+ALL,ALL,product_spectral_safeguard,1.0,6107,76,1.2444735549369577,1.0,0.999944070857576,0.9389248974213747,150.01
+ALL,ALL,product_spectral_safeguard,3.0,6107,199,3.2585557556901916,1.0,0.9732537163933581,0.9155945261424892,150.01

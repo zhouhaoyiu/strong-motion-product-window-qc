@@ -13,6 +13,28 @@ from scripts import evaluate_strong_motion_response_spectrum_retention as spectr
 
 
 class ResponseSpectrumRetentionTests(unittest.TestCase):
+    def test_pseudo_spectral_acceleration_includes_post_record_ringdown(self) -> None:
+        sampling_rate = 100.0
+        impulse_at_end = np.zeros(100, dtype=float)
+        impulse_at_end[-1] = 1.0
+
+        without_ringdown = spectrum.pseudo_spectral_acceleration(
+            impulse_at_end,
+            period=1.0,
+            damping=0.05,
+            sampling_rate=sampling_rate,
+            ringdown_cycles=0.0,
+        )
+        with_ringdown = spectrum.pseudo_spectral_acceleration(
+            impulse_at_end,
+            period=1.0,
+            damping=0.05,
+            sampling_rate=sampling_rate,
+            ringdown_cycles=5.0,
+        )
+
+        self.assertGreater(with_ringdown, 10.0 * without_ringdown)
+
     def test_pseudo_spectral_acceleration_prefers_matching_period(self) -> None:
         sampling_rate = 100.0
         time = np.arange(0, 20, 1 / sampling_rate)
@@ -39,6 +61,23 @@ class ResponseSpectrumRetentionTests(unittest.TestCase):
         self.assertEqual(len(out), 1)
         self.assertEqual(out.iloc[0]["policy"], "feature_onset_fixed")
         self.assertEqual(int(out.iloc[0]["window_start_sample"]), 10)
+
+    def test_spectrum_audit_uses_worst_component_retention(self) -> None:
+        sampling_rate = 100.0
+        time = np.arange(1000) / sampling_rate
+        waveform = np.zeros((3, 1000), dtype=float)
+        waveform[0, :500] = 10.0 * np.sin(2 * np.pi * time[:500])
+        waveform[1, 500:] = 8.0 * np.sin(2 * np.pi * time[500:])
+        row = pd.Series({"record_uid": "r", "dataset": "K-NET", "priority_group": "m4", "sampling_rate_hz": sampling_rate})
+        windows = pd.DataFrame(
+            [{"policy": "test", "selected_candidate": "test", "selection_status": "direct", "window_start_sample": 0, "window_end_sample": 500}]
+        )
+
+        result = spectrum.record_spectrum_rows(row, waveform, windows, [1.0], 0.05, 0.95)[0]
+
+        self.assertLess(float(result["psa_retention"]), 0.95)
+        self.assertTrue(result["spectrum_unstable"])
+        self.assertEqual(float(result["ringdown_cycles"]), 5.0)
 
     def test_run_response_spectrum_retention_writes_outputs_with_mocked_loader(self) -> None:
         features = pd.DataFrame(
@@ -78,7 +117,7 @@ class ResponseSpectrumRetentionTests(unittest.TestCase):
         original_loader = spectrum.load_record_waveform
         try:
             spectrum.load_waveform_handles = lambda _records, _knet_waveforms: (object(), None, None, None)
-            spectrum.load_record_waveform = lambda _row, _instance_data, _h5, _keys, _hp, pnw_data=None: waveform
+            spectrum.load_record_waveform = lambda _row, _instance_data, _h5, _keys, _hp, pnw_data=None, acceleration_highpass_hz=None: waveform
             with tempfile.TemporaryDirectory() as tmp:
                 outputs = spectrum.run_response_spectrum_retention(
                     features=features,

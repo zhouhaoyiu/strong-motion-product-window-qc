@@ -1,0 +1,16 @@
+dataset,priority_group,policy,period_sec,records,spectrum_unstable_records,spectrum_unstable_pct,median_psa_retention,p05_psa_retention,p01_psa_retention,median_window_duration_sec
+PNWAccelerometers,low_magnitude_background,product_spectral_safeguard,0.2,5563,0,0.0,1.0,1.0,1.0,150.01
+PNWAccelerometers,low_magnitude_background,product_spectral_safeguard,1.0,5563,0,0.0,1.0,1.0,0.9994445032159933,150.01
+PNWAccelerometers,low_magnitude_background,product_spectral_safeguard,3.0,5563,0,0.0,1.0,1.0,0.9956170088131033,150.01
+PNWAccelerometers,m3_to_m4_small_event,product_spectral_safeguard,0.2,468,0,0.0,1.0,0.9999999999999997,0.9999999987376098,150.01
+PNWAccelerometers,m3_to_m4_small_event,product_spectral_safeguard,1.0,468,0,0.0,1.0,0.9999734031229115,0.9993208622837086,150.01
+PNWAccelerometers,m3_to_m4_small_event,product_spectral_safeguard,3.0,468,0,0.0,1.0,0.9945662724001757,0.9840489085702058,150.01
+PNWAccelerometers,m4plus_strong_motion,product_spectral_safeguard,0.2,76,0,0.0,1.0,0.9999999994369042,0.9999686102162941,120.42000000000002
+PNWAccelerometers,m4plus_strong_motion,product_spectral_safeguard,1.0,76,0,0.0,1.0,0.9998975922552629,0.9997541084882695,120.42000000000002
+PNWAccelerometers,m4plus_strong_motion,product_spectral_safeguard,3.0,76,0,0.0,1.0,0.9871599543215566,0.9816423794580861,120.42000000000002
+PNWAccelerometers,ALL,product_spectral_safeguard,0.2,6107,0,0.0,1.0,1.0,0.9999999999999996,150.01
+PNWAccelerometers,ALL,product_spectral_safeguard,1.0,6107,0,0.0,1.0,0.9999999999999936,0.9993471010241631,150.01
+PNWAccelerometers,ALL,product_spectral_safeguard,3.0,6107,0,0.0,1.0,0.9999999653226606,0.990788311262289,150.01
+ALL,ALL,product_spectral_safeguard,0.2,6107,0,0.0,1.0,1.0,0.9999999999999996,150.01
+ALL,ALL,product_spectral_safeguard,1.0,6107,0,0.0,1.0,0.9999999999999936,0.9993471010241631,150.01
+ALL,ALL,product_spectral_safeguard,3.0,6107,0,0.0,1.0,0.9999999653226606,0.990788311262289,150.01

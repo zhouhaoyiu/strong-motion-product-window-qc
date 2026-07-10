@@ -1,60 +1,39 @@
 # Public Archive Metadata
 
-Use this file as the public repository and release metadata summary.
+## Title
 
-## Recommended Title
-
-StrongMotion-QC SRL Reproducibility Release for "Auditable Product-Stable Window
-Selection for Strong-Motion Records"
+StrongMotion-QC v0.2.0: Reproducibility Materials for "A Two-Stage Product Audit for Strong-Motion Processing Windows"
 
 ## Creators
 
-- Haoyu Zhou
-- Qiang Ma
+- Haoyu Zhou, ORCID 0009-0003-8817-1209
+- Qiang Ma, ORCID 0000-0002-9768-5223
 
 ## Description
 
-This archive supports the manuscript "Auditable Product-Stable Window Selection
-for Strong-Motion Records". It contains code, focused tests, compact derived
-summary tables, manuscript figures, record-level audit cases, the manuscript
-PDF/source files, checksums, and data-source boundary notes. Raw waveform
-archives are excluded and should be obtained from their public providers. The
-PNWAccelerometers outputs are included as an external third-party stress check,
-not as part of the primary 53,463-record denominator.
+This archive contains the code, focused tests, compact summary tables, figures, and English and Chinese manuscript sources for a two-stage offline audit of strong-motion processing windows. The main analysis covers 44,674 InstanceGM and K-NET acceleration records. PNWAccelerometers contributes an independent 6,107-record external evaluation. Raw waveforms and large record-level intermediate tables are excluded.
 
 ## Keywords
 
-strong-motion records; processing windows; ground-motion products; response
-spectra; engineering seismology; reproducible audit
+strong-motion records; processing windows; quality control; pseudo-spectral acceleration; engineering seismology
 
-## License Statement
+## Licenses
 
-Code and tests: MIT License. Derived summary tables, figures, record-audit
-plots, manuscript-support metadata, and documentation: CC BY 4.0. Raw
-InstanceGM/INSTANCE and K-NET waveform archives are excluded and remain subject
-to provider terms.
+- Source code and tests: MIT License.
+- Derived tables, figures, and documentation: CC BY 4.0.
+- Raw waveform data: provider terms; not redistributed.
 
-## Data and Resource Access Dates
+## Data Access Dates
 
-- InstanceGM/INSTANCE accessed: 2026-06-16
-- K-NET/NIED accessed: 2026-06-16
-- PNWAccelerometers accessed through SeisBench local cache: 2026-06-18
-- Final public archive created/accessed: 2026-06-18
+- InstanceGM/INSTANCE: 16 June 2026.
+- NIED K-NET: 16 June 2026.
+- PNWAccelerometers through SeisBench: 18 June 2026.
+- Public code archive: 10 July 2026.
 
 ## Related Identifiers
 
-- Manuscript: [journal DOI after acceptance, if available]
-- INSTANCE article: https://doi.org/10.5194/essd-13-5509-2021
 - INSTANCE dataset: https://doi.org/10.13127/INSTANCE
-- NIED K-NET, KiK-net: https://doi.org/10.17598/NIED.0004
-- PNW AI-ready seismic dataset: https://doi.org/10.26443/seismica.v2i1.368
-- Public GitHub release: https://github.com/zhouhaoyiu/strong-motion-product-window-qc/releases/tag/v0.1.0
-
-## Files To Include
-
-- `strong_motion_qc_srl_reproducibility_release_current.zip`
-- `README.md`
-- `REPRODUCTION_COMMANDS.md`
-- `LICENSE`
-- `metadata/file_checksums.csv`
-- `metadata/data_source_manifest.csv`
+- NIED K-NET and KiK-net: https://doi.org/10.17598/NIED.0004
+- PNWAccelerometers article: https://doi.org/10.26443/seismica.v2i1.368
+- GitHub release: https://github.com/zhouhaoyiu/strong-motion-product-window-qc/releases/tag/v0.2.0
+- Manuscript DOI: to be added after publication

@@ -59,6 +59,55 @@ class EvaluateStrongMotionWindowStabilityTests(unittest.TestCase):
         self.assertAlmostEqual(float(adaptive["start_sec"]), 3.0)
         self.assertAlmostEqual(float(adaptive["end_sec"]), 23.0)
 
+    def test_component_peak_audit_catches_a_secondary_peak_outside_window(self) -> None:
+        components = np.zeros((3, 100), dtype=float)
+        components[0, 20] = 10.0
+        components[1, 80] = 9.0
+        signal = stability.vector_signal(components)
+
+        out = stability.evaluate_window(
+            signal,
+            sampling_rate=10.0,
+            start_sec=0.0,
+            end_sec=3.0,
+            pga_retention_threshold=0.99,
+            energy_retention_threshold=0.0,
+            components=components,
+        )
+
+        self.assertTrue(out["window_unstable"])
+        self.assertFalse(out["peak_inside_window"])
+        self.assertEqual(float(out["pga_retention"]), 0.0)
+
+    def test_candidate_windows_add_duration_grid_and_arias_comparator(self) -> None:
+        row = pd.Series(
+            {
+                "feature_onset_sec": 5.0,
+                "feature_energy_onset_sec": 5.0,
+                "feature_energy_end_sec": 12.0,
+                "has_catalog_p": False,
+            }
+        )
+        signal = np.zeros(1000, dtype=float)
+        signal[100:300] = 1.0
+
+        candidates = stability.candidate_windows(
+            row,
+            n_samples=1000,
+            sampling_rate=10.0,
+            pre_sec=2.0,
+            fixed_after_sec=40.0,
+            adaptive_post_sec=3.0,
+            fixed_after_grid=[20.0, 40.0, 60.0],
+            signal=signal,
+        )
+
+        names = {item["candidate"] for item in candidates}
+        self.assertIn("feature_onset_fixed_20s", names)
+        self.assertIn("feature_onset_fixed_60s", names)
+        self.assertIn("arias_1_99_padded", names)
+        self.assertNotIn("feature_onset_fixed_40s", names)
+
     def test_run_window_stability_writes_outputs_with_mocked_loader(self) -> None:
         features = pd.DataFrame(
             {
