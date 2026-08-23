@@ -30,8 +30,11 @@ def make_row(uid: str, dataset: str, magnitude: float, magnitude_bin: str, split
         "n_samples": 12000,
         "duration_sec": 120.0,
         "has_catalog_p": True,
+        "has_catalog_s": True,
         "catalog_p_sec": 12.0,
+        "catalog_s_sec": 18.0,
         "catalog_p_sample": 1200,
+        "catalog_s_sample": 1800,
         "catalog_fields_for_evaluation_only": "catalog_p_sec,catalog_s_sec,catalog_p_sample,catalog_s_sample",
         "metadata_waveform_candidate": True,
         "m4plus_eval_candidate": magnitude >= 4.0,
@@ -79,6 +82,21 @@ class BuildStrongMotionQCWorklistTests(unittest.TestCase):
 
         self.assertEqual(int(worklist["dataset"].eq("InstanceGM").sum()), 2)
         self.assertEqual(int(worklist["dataset"].eq("K-NET").sum()), 4)
+
+    def test_acceleration_only_excludes_instance_velocity(self) -> None:
+        acceleration = make_row("InstanceGM:0", "InstanceGM", 4.4, "4-4.5", "train")
+        velocity = make_row("InstanceGM:1", "InstanceGM", 4.4, "4-4.5", "train")
+        velocity["units"] = "mps"
+        knet = make_row("K-NET:0", "K-NET", 4.4, "4-4.5", "train")
+        knet["units"] = ""
+
+        worklist = builder.build_worklist(
+            pd.DataFrame([acceleration, velocity, knet]),
+            per_stratum=10,
+            acceleration_only=True,
+        )
+
+        self.assertEqual(set(worklist["record_uid"]), {"InstanceGM:0", "K-NET:0"})
 
 
 if __name__ == "__main__":

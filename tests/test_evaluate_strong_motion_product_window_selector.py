@@ -56,6 +56,21 @@ class ProductWindowSelectorTests(unittest.TestCase):
         self.assertEqual(selected.loc[0, "selection_status"], "stable_candidate")
         self.assertEqual(float(selected.loc[0, "window_duration_sec"]), 25.0)
 
+    def test_shortest_stable_policy_includes_grid_and_arias_candidates(self) -> None:
+        stability = pd.DataFrame(
+            [
+                row("a", "feature_onset_fixed", False, 42.0),
+                row("a", "feature_onset_fixed_20s", False, 22.0),
+                row("a", "arias_1_99_padded", False, 30.0),
+                row("a", "full_record", False, 120.0),
+            ]
+        )
+
+        selected = selector.evaluate_policies(stability, policies=["shortest_stable_no_catalog"])
+
+        self.assertEqual(selected.loc[0, "selected_candidate"], "feature_onset_fixed_20s")
+        self.assertEqual(float(selected.loc[0, "window_duration_sec"]), 22.0)
+
     def test_shortest_stable_policy_falls_back_to_full_record(self) -> None:
         stability = pd.DataFrame(
             [

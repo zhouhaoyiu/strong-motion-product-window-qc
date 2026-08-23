@@ -1,0 +1,29 @@
+field_id,section,label,required_before_submission,allowed_final_statuses,metadata_status,status,detail
+journal_target,journal,Target journal and article type,yes,complete,complete,PASS,metadata field is ready or explicitly finalized
+submission_issue_choice,journal,Submission issue choice,yes,complete,complete,PASS,metadata field is ready or explicitly finalized
+srl_classification_terms,journal,SRL classification terms,yes,complete,complete,PASS,metadata field is ready or explicitly finalized
+flinn_engdahl_region,journal,Flinn-Engdahl region,yes,complete;not_applicable,not_applicable,PASS,metadata field is ready or explicitly finalized
+major_earthquake_name,journal,Major earthquake name,yes,complete;not_applicable,not_applicable,PASS,metadata field is ready or explicitly finalized
+license_choice,journal,Publication license choice,yes,complete,complete,PASS,metadata field is ready or explicitly finalized
+editor_background_information,journal,Background information for editor,yes,complete,complete,PASS,metadata field is ready or explicitly finalized
+potential_referees,journal,Potential referees,no,complete;deferred,deferred,PASS,metadata field is ready or explicitly finalized
+opposed_referees,journal,Opposed referees,no,complete;deferred;not_applicable,not_applicable,PASS,metadata field is ready or explicitly finalized
+author_order,authors,Author order,yes,complete,complete,PASS,metadata field is ready or explicitly finalized
+author_emails,authors,Author email addresses,yes,complete,complete,PASS,metadata field is ready or explicitly finalized
+author_orcid,authors,Author ORCID,no,complete;deferred,complete,PASS,metadata field is ready or explicitly finalized
+author_affiliations,authors,Author affiliations,yes,complete,complete,PASS,metadata field is ready or explicitly finalized
+corresponding_author_name,authors,Corresponding author name,no,complete;deferred,complete,PASS,metadata field is ready or explicitly finalized
+corresponding_author_email,authors,Corresponding author email,no,complete;deferred,complete,PASS,metadata field is ready or explicitly finalized
+corresponding_author_mailing_address,authors,Corresponding author mailing address,no,complete;deferred,complete,PASS,metadata field is ready or explicitly finalized
+funding_statement,statements,Funding statement,yes,complete,complete,PASS,metadata field is ready or explicitly finalized
+data_provider_acknowledgments,statements,Data-provider acknowledgments,yes,complete,complete,PASS,metadata field is ready or explicitly finalized
+competing_interests,statements,Declaration of competing interests,yes,complete,complete,PASS,metadata field is ready or explicitly finalized
+author_approval,statements,All-author approval,yes,complete,complete,PASS,metadata field is ready or explicitly finalized
+code_archive_url,data_resources,Public code archive URL,yes,complete,complete,PASS,metadata field is ready or explicitly finalized
+data_access_dates,data_resources,Data and resource access dates,yes,complete,complete,PASS,metadata field is ready or explicitly finalized
+software_release_doi,data_resources,Software DOI or archive decision,no,complete;deferred,complete,PASS,metadata field is ready or explicitly finalized
+public_release_license,data_resources,Public release license,yes,complete,complete,PASS,metadata field is ready or explicitly finalized
+ai_tool_disclosure,data_resources,AI tool disclosure,yes,complete,complete,PASS,metadata field is ready or explicitly finalized
+supplemental_material_decision,supplemental,Supplemental-material decision,yes,complete,complete,PASS,metadata field is ready or explicitly finalized
+qc_review_decision,review,Human QC review claim decision,no,complete;deferred,deferred,PASS,metadata field is ready or explicitly finalized
+knet_scope_decision,scope,K-NET scope decision,yes,complete,complete,PASS,metadata field is ready or explicitly finalized

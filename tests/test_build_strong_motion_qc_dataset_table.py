@@ -28,9 +28,11 @@ class StrongMotionQcDatasetTableTests(unittest.TestCase):
         summary = table.summarize_dataset(features)
         knet = summary[summary["dataset"].eq("K-NET")].iloc[0]
 
-        self.assertEqual(int(knet["records"]), 2)
+        self.assertEqual(int(knet["candidate_records"]), 2)
+        self.assertEqual(int(knet["records"]), 1)
+        self.assertEqual(int(knet["load_error_records"]), 1)
         self.assertEqual(int(knet["events"]), 1)
-        self.assertEqual(int(knet["stations"]), 2)
+        self.assertEqual(int(knet["stations"]), 1)
         self.assertEqual(int(knet["loaded_records"]), 1)
         self.assertEqual(int(knet["catalog_p_records"]), 1)
 

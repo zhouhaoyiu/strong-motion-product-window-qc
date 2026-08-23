@@ -1,0 +1,18 @@
+check_id,status,evidence,requirement
+abstract_length,PASS,288 words,SRL abstracts should be 300 words or less.
+regular_article_length,PASS,4220 manuscript words before figure/table captions,Regular SRL articles are recommended at 6000 words.
+figure_count,PASS,6 figures,Regular SRL articles are recommended at 10 figures.
+table_count,PASS,3 tables,Regular SRL articles are recommended at 3 tables; higher counts may be accepted at editor discretion.
+figure_alt_text,PASS,6 alt-text entries for 6 figures,SRL asks authors to provide alt-text on a separate line after each figure caption.
+pdf_letter_size,PASS,612 x 792 pts (letter),All pages should use standard U.S. letter size.
+pdf_pages_present,PASS,20 pages,The review manuscript PDF should compile.
+one_inch_margins,PASS,geometry margin=1in,SRL requests one-inch margins.
+font_size,PASS,12pt letter article,SRL requests 12-point font size.
+double_spacing,PASS,doublespacing command present,SRL requests double-spaced material.
+line_numbers,PASS,continuous line numbering commands present,SRL requires continuous line numbering.
+section_numbering,PASS,section numbering disabled,SRL asks authors not to number section headers.
+data_resources_order,PASS,Data and Resources index=21442; Acknowledgments index=22607,SRL manuscript order places Data and Resources before Acknowledgments.
+corresponding_author_section,PASS,section present,SRL asks for full corresponding-author mailing address.
+submission_packet,PASS,outputs/strong_motion_qc_srl_submission_packet_current.zip,Advisor/pre-submission packet should exist.
+reproducibility_release,PASS,outputs/strong_motion_qc_srl_submission_packet_current.zip,Lightweight reproducibility release should exist.
+author_metadata_finalization,PASS,no placeholder metadata detected,"Author, funding, acknowledgment, and corresponding-author fields should contain final text before upload."

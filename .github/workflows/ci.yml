@@ -15,5 +15,10 @@ jobs:
       - uses: actions/setup-python@v6
         with:
           python-version: "3.11"
+          cache: pip
+      - name: Install dependencies
+        run: python -m pip install -r requirements.txt
       - name: Compile Python sources
-        run: python -m compileall code tests
+        run: python -m compileall -q strong_motion_qc scripts tests
+      - name: Run tests
+        run: python -m unittest discover -s tests

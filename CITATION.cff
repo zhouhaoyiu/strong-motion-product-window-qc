@@ -1,0 +1,20 @@
+cff-version: 1.2.0
+message: "If you use this software or its derived audit tables, please cite this repository."
+title: "StrongMotion-QC: A Two-Stage Product Audit for Strong-Motion Processing Windows"
+version: 0.2.0
+date-released: 2026-07-10
+repository-code: "https://github.com/zhouhaoyiu/strong-motion-product-window-qc"
+license: MIT
+authors:
+  - family-names: Zhou
+    given-names: Haoyu
+    orcid: "https://orcid.org/0009-0003-8817-1209"
+  - family-names: Ma
+    given-names: Qiang
+    orcid: "https://orcid.org/0000-0002-9768-5223"
+keywords:
+  - strong-motion records
+  - processing windows
+  - quality control
+  - response spectra
+  - engineering seismology
